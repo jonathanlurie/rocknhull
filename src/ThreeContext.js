@@ -9,7 +9,7 @@ import EventManager from './EventManager'
  * An event can be associated to a ThreeContext instance: `onRaycast` with the method
  * `.on("onRaycast", function(s){...})` where `s` is the section object being raycasted.
  */
-export class ThreeContext extends EventManager {
+export default class ThreeContext extends EventManager {
   /**
    * @param {DONObject} divObj - the div object as a DOM element.
    * Will be used to host the WebGL context
@@ -203,5 +203,3 @@ export class ThreeContext extends EventManager {
     this._renderer = null
   }
 }
-
-export default ThreeContext
