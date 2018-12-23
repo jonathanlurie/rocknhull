@@ -1,3 +1,4 @@
+import AnchorPoint from './AnchorPoint'
 
 /**
  * Everything to handle a collection of AnchorPoints
@@ -58,8 +59,17 @@ export default class AnchorPointCollection {
   }
 
 
+  /**
+   * Generate an array of all the anchor point of this collection
+   * @return {[THREE.Vector3]} array of THREE.Vector3
+   */
   getAllAnchorPoints() {
-    
+    let all = []
+    let ids = Object.keys(this._collection)
+    for (let i=0; i<ids.length; i++) {
+      all = all.concat(this._collection[ids[i]].getAnchorPoints())
+    }
+    return all
   }
 
 

@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Scene, AmbientLight, Color, Fog, AxesHelper, Object3D, GridHelper, DirectionalLight, WebGLRenderer, Raycaster, Vector2, TorusKnotBufferGeometry, MeshPhongMaterial, Mesh, Vector3, Quaternion, EventDispatcher, MOUSE, Spherical } from 'three';
+import { PerspectiveCamera, Scene, AmbientLight, Color, Fog, AxesHelper, Object3D, GridHelper, DirectionalLight, WebGLRenderer, Raycaster, Vector2, TorusKnotBufferGeometry, MeshPhongMaterial, Mesh, Vector3, Quaternion, EventDispatcher, MOUSE, Spherical, MeshBasicMaterial, SphereBufferGeometry } from 'three';
 
 /*
  * @author Eberhard Graether / http://egraether.com/
@@ -1713,17 +1713,17 @@ class ThreeContext extends EventManager {
     // mouse controls
     this._controls = new OrbitControls(this._camera, this._renderer.domElement);
     //this._controls.rotateSpeed = 3
-    this._controls.addEventListener('change', this._render.bind(this));
+    this._controls.addEventListener('change', this.render.bind(this));
 
     window.addEventListener('resize', () => {
       that._camera.aspect = divObj.clientWidth / divObj.clientHeight;
       that._camera.updateProjectionMatrix();
       that._renderer.setSize(divObj.clientWidth, divObj.clientHeight);
       that._controls.handleResize();
-      that._render();
+      that.render();
     }, false);
 
-    this._render();
+    this.render();
     this._animate();
   }
 
@@ -1736,7 +1736,7 @@ class ThreeContext extends EventManager {
     const material = new MeshPhongMaterial({ color: Math.ceil(Math.random() * 0xffff00) });
     const torusKnot = new Mesh(geometry, material);
     this._scene.add(torusKnot);
-    this._render();
+    this.render();
   }
 
 
@@ -1765,7 +1765,7 @@ class ThreeContext extends EventManager {
   setCameraFieldOfView(fov) {
     this._camera.fov = fov;
     this._camera.updateProjectionMatrix();
-    this._render();
+    this.render();
   }
 
 
@@ -1783,9 +1783,12 @@ class ThreeContext extends EventManager {
    * @private
    * Render the scene
    */
-  _render() {
+  render() {
     this._renderer.render(this._scene, this._camera);
   }
+
+
+
 
 
   /**
@@ -1930,9 +1933,205 @@ class AnchorPoint {
 
 }
 
+/**
+ * Everything to handle a collection of AnchorPoints
+ */
+class AnchorPointCollection {
+
+  constructor () {
+    this._collection = {};
+  }
+
+
+  /**
+   * Add a new anchor point to the collection. An ID will be automatically
+   * created for it so that it can be retrieved later.
+   * @param {Array} pos - position as [x, y, z]
+   * @return {Object} anchor point info as {id: string, anchorPoint: AnchorPoint}
+   */
+  add(pos) {
+    // we generate a random ID for this AnchorPoint
+    let id = Math.random().toFixed(10).split('.')[1];
+
+    this._collection[id] = new AnchorPoint(pos);
+    return {
+      id: id,
+      anchorPoint: this._collection[id]
+    }
+  }
+
+
+  /**
+   * Get an anchor point from the collection
+   * @param  {String} id - the id of the anchor point
+   * @return {AnchorPoint|null}
+   */
+  get(id) {
+    if (id in this._collection) {
+      return this._collection[id]
+    } else {
+      return null
+    }
+  }
+
+
+  /**
+   * Delete the anchor point with the given id from within the collection.
+   * To make it not entirely destructive, the point is returned by this method.
+   * @param  {String} id - the id of the anchor point
+   * @return {AnchorPoint|null}
+   */
+  delete(id) {
+    if (id in this._collection) {
+      let p = this._collection[id];
+      delete this._collection[id];
+      return p
+    } else {
+      return null
+    }
+  }
+
+
+  /**
+   * Generate an array of all the anchor point of this collection
+   * @return {[THREE.Vector3]} array of THREE.Vector3
+   */
+  getAllAnchorPoints() {
+    let all = [];
+    let ids = Object.keys(this._collection);
+    for (let i=0; i<ids.length; i++) {
+      all = all.concat(this._collection[ids[i]].getAnchorPoints());
+    }
+    return all
+  }
+
+
+}
+
+class HullView {
+
+  /**
+   * Build the HullView
+   * @param {THREE.Scene} scene
+   */
+  constructor (scene, anchorPointCollection) {
+    this._scene = scene;
+    this._anchorPointCollection = anchorPointCollection;
+
+    this._container = new Object3D();
+    this._anchorPointsContainer = new Object3D();
+    this._convexHullContainer = new Object3D();
+
+    this._scene.add(this._container);
+    this._container.add(this._anchorPointsContainer);
+    this._container.add(this._convexHullContainer);
+
+    this._cachedAnchorPoints = null;
+    let anchorPointsMaterial = new MeshBasicMaterial({ color: 0xffff00 });
+    let anchorPointsGeometry = new SphereBufferGeometry(10, 32, 32);
+    this._anchorPointsMesh = new Mesh(anchorPointsGeometry, anchorPointsMaterial);
+    this._convexHullMaterial = new MeshPhongMaterial({ color: 0xeeeeee });
+
+    this._on = {
+      renderNeeded: function () {}
+    };
+  }
+
+
+  /**
+   * Event called when the webgl context needs to be re-rendered
+   * @param  {Function} cb - callback for when a rendering is needed
+   */
+  onRenderNeeded (cb) {
+    if (typeof cb === 'function' ) {
+      this._on.renderNeeded = cb;
+    }
+  }
+
+
+  /**
+   * @private
+   * remove every anchor points spherical hints
+   */
+  _flushAnchorPointContainer () {
+    let apc = this._anchorPointsContainer;
+    let ch = apc.children;
+
+    for (let i=0; i<ch.length; i++) {
+      apc.remove(ch[i]);
+    }
+
+    this._on.renderNeeded();
+  }
+
+
+  /**
+   * @private
+   * remove everything from the convex hull container
+   */
+  _flushConvexHullContainer () {
+    let chc = this._convexHullContainer;
+    let ch = chc.children;
+
+    for (let i=0; i<ch.length; i++) {
+      chc.remove(ch[i]);
+    }
+
+    this._on.renderNeeded();
+  }
+
+
+  /**
+   * Build the spherical hints for each anchor points and add them to the scene
+   * @return {[type]} [description]
+   */
+  updateAnchorPoints () {
+    this._flushAnchorPointContainer(); // TODO: not working
+
+    this._cachedAnchorPoints = this._anchorPointCollection.getAllAnchorPoints();
+    let apList = this._cachedAnchorPoints;
+
+    for (let i=0; i<apList.length; i++) {
+      let apMesh = this._anchorPointsMesh.clone();
+      apMesh.position.copy(apList[i]);
+      this._anchorPointsContainer.add(apMesh);
+    }
+
+    this._on.renderNeeded();
+  }
+
+
+}
+
+class Rocknhull {
+
+  constructor (div) {
+    let that = this;
+    this._threeContext = new ThreeContext(div);
+    this._anchorPointCollection = new AnchorPointCollection();
+    this._hullView = new HullView(
+      this._threeContext.getScene(),
+      this._anchorPointCollection
+    );
+
+    this._hullView.onRenderNeeded(function(){
+      that._threeContext.render();
+    });
+  }
+
+
+  getAnchorPointCollection () {
+    return this._anchorPointCollection
+  }
+
+
+  getHullView () {
+    return this._hullView
+  }
+}
+
 var main = ({
-  ThreeContext,
-  AnchorPoint,
+  Rocknhull,
 })
 
 export default main;

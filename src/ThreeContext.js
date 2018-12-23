@@ -85,17 +85,17 @@ export default class ThreeContext extends EventManager {
     // mouse controls
     this._controls = new OrbitControls(this._camera, this._renderer.domElement)
     //this._controls.rotateSpeed = 3
-    this._controls.addEventListener('change', this._render.bind(this))
+    this._controls.addEventListener('change', this.render.bind(this))
 
     window.addEventListener('resize', () => {
       that._camera.aspect = divObj.clientWidth / divObj.clientHeight
       that._camera.updateProjectionMatrix()
       that._renderer.setSize(divObj.clientWidth, divObj.clientHeight)
       that._controls.handleResize()
-      that._render()
+      that.render()
     }, false)
 
-    this._render()
+    this.render()
     this._animate()
   }
 
@@ -108,7 +108,7 @@ export default class ThreeContext extends EventManager {
     const material = new THREE.MeshPhongMaterial({ color: Math.ceil(Math.random() * 0xffff00) })
     const torusKnot = new THREE.Mesh(geometry, material)
     this._scene.add(torusKnot)
-    this._render()
+    this.render()
   }
 
 
@@ -137,7 +137,7 @@ export default class ThreeContext extends EventManager {
   setCameraFieldOfView(fov) {
     this._camera.fov = fov
     this._camera.updateProjectionMatrix()
-    this._render()
+    this.render()
   }
 
 
@@ -155,9 +155,12 @@ export default class ThreeContext extends EventManager {
    * @private
    * Render the scene
    */
-  _render() {
+  render() {
     this._renderer.render(this._scene, this._camera)
   }
+
+
+
 
 
   /**

@@ -1,7 +1,5 @@
-import ThreeContext from './ThreeContext'
-import AnchorPoint from './AnchorPoint'
+import Rocknhull from './Rocknhull'
 
 export default ({
-  ThreeContext,
-  AnchorPoint,
+  Rocknhull,
 })
