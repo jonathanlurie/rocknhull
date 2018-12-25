@@ -48020,7 +48020,7 @@
 	      that._camera.aspect = divObj.clientWidth / divObj.clientHeight;
 	      that._camera.updateProjectionMatrix();
 	      that._renderer.setSize(divObj.clientWidth, divObj.clientHeight);
-	      that._controls.handleResize();
+	      // that._controls.handleResize()
 	      that.render();
 	    }, false);
 
@@ -48356,10 +48356,9 @@
 	   */
 	  _flushAnchorPointContainer () {
 	    let apc = this._anchorPointsContainer;
-	    let ch = apc.children;
 
-	    for (let i=0; i<ch.length; i++) {
-	      apc.remove(ch[i]);
+	    for (let i = apc.children.length - 1; i >= 0; i--) {
+	      apc.remove(apc.children[i]);
 	    }
 
 	    this._on.renderNeeded();
@@ -48372,10 +48371,9 @@
 	   */
 	  _flushConvexHullContainer () {
 	    let chc = this._convexHullContainer;
-	    let ch = chc.children;
 
-	    for (let i=0; i<ch.length; i++) {
-	      chc.remove(ch[i]);
+	    for (let i = chc.children.length - 1; i >= 0; i--) {
+	      chc.remove(chc.children[i]);
 	    }
 
 	    this._on.renderNeeded();

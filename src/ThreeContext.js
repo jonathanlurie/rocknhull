@@ -91,7 +91,7 @@ export default class ThreeContext extends EventManager {
       that._camera.aspect = divObj.clientWidth / divObj.clientHeight
       that._camera.updateProjectionMatrix()
       that._renderer.setSize(divObj.clientWidth, divObj.clientHeight)
-      that._controls.handleResize()
+      // that._controls.handleResize()
       that.render()
     }, false)
 

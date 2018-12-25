@@ -51,6 +51,16 @@
     console.log(rnh.getAnchorPointCollection())
     console.log(rnh.getHullView())
 
+    let apc = rnh.getAnchorPointCollection()
+    let hv = rnh.getHullView()
+
+    let point = apc.add([15, 10, 50])
+    point.anchorPoint.enableMirrorX(true)
+    hv.updateAnchorPoints()
+
+    point.anchorPoint.enableMirrorX(false)
+    hv.updateAnchorPoints()
+
   </script>
 
 </body>

@@ -48,10 +48,9 @@ export default class HullView {
    */
   _flushAnchorPointContainer () {
     let apc = this._anchorPointsContainer
-    let ch = apc.children
 
-    for (let i=0; i<ch.length; i++) {
-      apc.remove(ch[i])
+    for (let i = apc.children.length - 1; i >= 0; i--) {
+      apc.remove(apc.children[i])
     }
 
     this._on.renderNeeded()
@@ -64,10 +63,9 @@ export default class HullView {
    */
   _flushConvexHullContainer () {
     let chc = this._convexHullContainer
-    let ch = chc.children
 
-    for (let i=0; i<ch.length; i++) {
-      chc.remove(ch[i])
+    for (let i = chc.children.length - 1; i >= 0; i--) {
+      chc.remove(chc.children[i])
     }
 
     this._on.renderNeeded()
