@@ -54,12 +54,37 @@
     let apc = rnh.getAnchorPointCollection()
     let hv = rnh.getHullView()
 
-    let point = apc.add([15, 10, 50])
-    point.anchorPoint.enableMirrorX(true)
-    hv.updateAnchorPoints()
 
-    point.anchorPoint.enableMirrorX(false)
+    apc.add([15, 10, 50]).anchorPoint
+    .enableMirrorX(true)
+    .enableMirrorY(true)
+    .enableMirrorZ(true)
+    //.enableRadialMirror(true)
+
     hv.updateAnchorPoints()
+    hv. buildConvexHull()
+
+
+   // makeRandomHull()
+
+    function makeRandomHull (nbPoints=10, xSpan=100, ySpan=100, zSpan=100) {
+      apc.deleteAllAnchorPoints()
+
+      for (let i=0; i<nbPoints; i++) {
+        let x = Math.random() * xSpan - xSpan / 2
+        let y = Math.random() * ySpan - ySpan / 2
+        let z = Math.random() * zSpan - zSpan / 2
+
+        apc.add([x, y, z]).anchorPoint
+        .enableMirrorX(true)
+        .enableMirrorY(true)
+        .enableMirrorZ(true)
+        .enableRadialMirror(true)
+      }
+
+      hv.updateAnchorPoints()
+      // hv. buildConvexHull()
+    }
 
   </script>
 

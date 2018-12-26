@@ -16,7 +16,7 @@ export default class AnchorPointCollection {
    * @param {Array} pos - position as [x, y, z]
    * @return {Object} anchor point info as {id: string, anchorPoint: AnchorPoint}
    */
-  add(pos) {
+  add (pos) {
     // we generate a random ID for this AnchorPoint
     let id = Math.random().toFixed(10).split('.')[1]
 
@@ -33,7 +33,7 @@ export default class AnchorPointCollection {
    * @param  {String} id - the id of the anchor point
    * @return {AnchorPoint|null}
    */
-  get(id) {
+  get (id) {
     if (id in this._collection) {
       return this._collection[id]
     } else {
@@ -48,7 +48,7 @@ export default class AnchorPointCollection {
    * @param  {String} id - the id of the anchor point
    * @return {AnchorPoint|null}
    */
-  delete(id) {
+  delete (id) {
     if (id in this._collection) {
       let p = this._collection[id]
       delete this._collection[id]
@@ -63,7 +63,7 @@ export default class AnchorPointCollection {
    * Generate an array of all the anchor point of this collection
    * @return {[THREE.Vector3]} array of THREE.Vector3
    */
-  getAllAnchorPoints() {
+  getAllAnchorPoints () {
     let all = []
     let ids = Object.keys(this._collection)
     for (let i=0; i<ids.length; i++) {
@@ -72,5 +72,9 @@ export default class AnchorPointCollection {
     return all
   }
 
+
+  deleteAllAnchorPoints () {
+    this._collection = {}
+  }
 
 }

@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { ConvexBufferGeometry } from './thirdparty/ConvexGeometry'
 
 
 export default class HullView {
@@ -19,11 +20,11 @@ export default class HullView {
     this._container.add(this._anchorPointsContainer)
     this._container.add(this._convexHullContainer)
 
-    this._cachedAnchorPoints = null
-    let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 })
-    let anchorPointsGeometry = new THREE.SphereBufferGeometry(10, 32, 32)
+    this._cachedAnchorPoints = []
+    let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+    let anchorPointsGeometry = new THREE.SphereBufferGeometry(1, 32, 32)
     this._anchorPointsMesh = new THREE.Mesh(anchorPointsGeometry, anchorPointsMaterial)
-    this._convexHullMaterial = new THREE.MeshPhongMaterial({ color: 0xeeeeee })
+    this._convexHullMaterial = new THREE.MeshPhongMaterial({ color: 0x6fe2db })
 
     this._on = {
       renderNeeded: function () {}
@@ -89,6 +90,31 @@ export default class HullView {
     }
 
     this._on.renderNeeded()
+  }
+
+
+  /**
+   * Build the convex hull and add it to the scene
+   * @return {[type]} [description]
+   */
+  buildConvexHull () {
+    if (!this._cachedAnchorPoints.length) {
+      this._cachedAnchorPoints = this._anchorPointCollection.getAllAnchorPoints()
+    }
+
+    if (this._cachedAnchorPoints.length < 3) {
+      console.warn('At least 4 points are required to build a mesh.')
+      return null
+    }
+
+    this._flushConvexHullContainer()
+
+    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints)
+    const convexMesh = new THREE.Mesh(convexGeometry, this._convexHullMaterial)
+    this._convexHullContainer.add(convexMesh)
+    this._on.renderNeeded()
+
+    return convexMesh
   }
 
 

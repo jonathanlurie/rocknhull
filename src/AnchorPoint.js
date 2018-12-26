@@ -17,16 +17,37 @@ export default class AnchorPoint {
     this._mirror = [false, false, false, false]
   }
 
+
+  /**
+   * Set the X component
+   * @param {Number} x - the X component of [x, y, z]
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
   setX(x){
     this._position[0] = x
+    return this
   }
 
+
+  /**
+   * Set the Y component
+   * @param {Number} y - the Y component of [x, y, z]
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
   setY(y){
     this._position[1] = y
+    return this
   }
 
+
+  /**
+   * Set the Z component
+   * @param {Number} z - the Z component of [x, y, z]
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
   setZ(z){
     this._position[2] = z
+    return this
   }
 
 
@@ -34,9 +55,11 @@ export default class AnchorPoint {
    * If true, the method `getVector3Ds()` will return the X mirrored point in
    * addition to the regular one
    * @param  {Boolean} en - true to mirror, false to not mirror
+   * @return {AnchorPoint} return `this` to enable chaining
    */
   enableMirrorX(en) {
     this._mirror[0] = en
+    return this
   }
 
 
@@ -44,9 +67,11 @@ export default class AnchorPoint {
    * If true, the method `getAnchorPoints()` will return the Y mirrored point in
    * addition to the regular one
    * @param  {Boolean} en - true to mirror, false to not mirror
+   * @return {AnchorPoint} return `this` to enable chaining
    */
   enableMirrorY(en) {
     this._mirror[1] = en
+    return this
   }
 
 
@@ -54,9 +79,11 @@ export default class AnchorPoint {
    * If true, the method `getAnchorPoints()` will return the Z mirrored point in
    * addition to the regular one
    * @param  {Boolean} en - true to mirror, false to not mirror
+   * @return {AnchorPoint} return `this` to enable chaining
    */
   enableMirrorZ(en) {
     this._mirror[2] = en
+    return this
   }
 
 
@@ -64,11 +91,21 @@ export default class AnchorPoint {
    * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
    * addition to the regular one
    * @param  {Boolean} en - true to symetry, false to not symetry
+   * @return {AnchorPoint} return `this` to enable chaining
    */
   enableRadialMirror(en) {
     this._mirror[3] = en
+    return this
   }
 
+
+  /*
+  TODO:
+    - remove radialMirror
+    - add radialX
+    - add radialY
+    - add radialZ
+  */
 
   /**
    * Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
