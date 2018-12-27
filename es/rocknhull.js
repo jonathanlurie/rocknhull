@@ -3112,6 +3112,9 @@ function ConvexBufferGeometry(points) {
 ConvexBufferGeometry.prototype = Object.create(BufferGeometry.prototype);
 ConvexBufferGeometry.prototype.constructor = ConvexBufferGeometry;
 
+/**
+ * The HullView in in charge of showing the convext hull
+ */
 class HullView {
 
   /**
@@ -3260,6 +3263,10 @@ class HullView {
 
 }
 
+/**
+ * Entry point of the Rocknhull project core. Initialize a few things and exposes
+ * its instance of `AnchorPointCollection` and `HullView`
+ */
 class Rocknhull {
 
   constructor (div) {
@@ -3277,11 +3284,19 @@ class Rocknhull {
   }
 
 
+  /**
+   * Get the HullView instance
+   * @return {HullView}
+   */
   getAnchorPointCollection () {
     return this._anchorPointCollection
   }
 
 
+  /**
+   * Get the HullView instance
+   * @return {HullView}
+   */
   getHullView () {
     return this._hullView
   }

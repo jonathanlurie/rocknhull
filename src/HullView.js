@@ -1,7 +1,9 @@
 import * as THREE from 'three'
 import { ConvexBufferGeometry } from './thirdparty/ConvexGeometry'
 
-
+/**
+ * The HullView in in charge of showing the convext hull
+ */
 export default class HullView {
 
   /**

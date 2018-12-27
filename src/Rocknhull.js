@@ -2,6 +2,11 @@ import ThreeContext from './ThreeContext'
 import AnchorPointCollection from './AnchorPointCollection'
 import HullView from './HullView'
 
+
+/**
+ * Entry point of the Rocknhull project core. Initialize a few things and exposes
+ * its instance of `AnchorPointCollection` and `HullView`
+ */
 export default class Rocknhull {
 
   constructor (div) {
@@ -19,11 +24,19 @@ export default class Rocknhull {
   }
 
 
+  /**
+   * Get the HullView instance
+   * @return {HullView}
+   */
   getAnchorPointCollection () {
     return this._anchorPointCollection
   }
 
 
+  /**
+   * Get the HullView instance
+   * @return {HullView}
+   */
   getHullView () {
     return this._hullView
   }

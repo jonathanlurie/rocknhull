@@ -3,39 +3,63 @@
 ### Table of Contents
 
 -   [AnchorPoint][1]
-    -   [setX][2]
-    -   [setY][3]
-    -   [setZ][4]
-    -   [enableMirrorX][5]
-    -   [enableMirrorY][6]
-    -   [enableMirrorZ][7]
-    -   [enableRadialMirrorX][8]
-    -   [getAnchorPoints][9]
--   [AnchorPointCollection][10]
-    -   [add][11]
-    -   [get][12]
-    -   [delete][13]
-    -   [getAllAnchorPoints][14]
-    -   [deleteAllAnchorPoints][15]
--   [EventManager][16]
-    -   [on][17]
--   [constructor][18]
--   [onRenderNeeded][19]
--   [updateAnchorPoints][20]
--   [buildConvexHull][21]
--   [showAnchorPoint][22]
--   [showConvexHull][23]
--   [wireframe][24]
--   [ThreeContext][25]
-    -   [addSampleShape][26]
-    -   [getScene][27]
-    -   [getCameraFieldOfView][28]
-    -   [setCameraFieldOfView][29]
-    -   [getSnapshotData][30]
-    -   [destroy][31]
--   [THREE][32]
--   [Tools][33]
-    -   [getOption][34]
+    -   [Parameters][2]
+    -   [setX][3]
+        -   [Parameters][4]
+    -   [setY][5]
+        -   [Parameters][6]
+    -   [setZ][7]
+        -   [Parameters][8]
+    -   [enableMirrorX][9]
+        -   [Parameters][10]
+    -   [enableMirrorY][11]
+        -   [Parameters][12]
+    -   [enableMirrorZ][13]
+        -   [Parameters][14]
+    -   [enableRadialMirrorX][15]
+        -   [Parameters][16]
+    -   [getAnchorPoints][17]
+-   [AnchorPointCollection][18]
+    -   [add][19]
+        -   [Parameters][20]
+    -   [get][21]
+        -   [Parameters][22]
+    -   [delete][23]
+        -   [Parameters][24]
+    -   [getAllAnchorPoints][25]
+    -   [deleteAllAnchorPoints][26]
+-   [EventManager][27]
+    -   [on][28]
+        -   [Parameters][29]
+-   [HullView][30]
+    -   [Parameters][31]
+    -   [onRenderNeeded][32]
+        -   [Parameters][33]
+    -   [updateAnchorPoints][34]
+    -   [buildConvexHull][35]
+    -   [showAnchorPoint][36]
+        -   [Parameters][37]
+    -   [showConvexHull][38]
+        -   [Parameters][39]
+    -   [wireframe][40]
+        -   [Parameters][41]
+-   [Rocknhull][42]
+    -   [Parameters][43]
+    -   [getAnchorPointCollection][44]
+    -   [getHullView][45]
+-   [ThreeContext][46]
+    -   [Parameters][47]
+    -   [addSampleShape][48]
+    -   [getScene][49]
+    -   [getCameraFieldOfView][50]
+    -   [setCameraFieldOfView][51]
+        -   [Parameters][52]
+    -   [getSnapshotData][53]
+    -   [destroy][54]
+-   [THREE][55]
+-   [Tools][56]
+    -   [getOption][57]
+        -   [Parameters][58]
 
 ## AnchorPoint
 
@@ -44,83 +68,83 @@ cartesian space as well as all its symmetrical clone.
 
 Note: this is not a graphic representation.
 
-**Parameters**
+### Parameters
 
--   `pos` **[Array][35]** position as [x, y, z]
+-   `pos` **[Array][59]** position as [x, y, z]
 
 ### setX
 
 Set the X component
 
-**Parameters**
+#### Parameters
 
--   `x` **[Number][36]** the X component of [x, y, z]
+-   `x` **[Number][60]** the X component of [x, y, z]
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### setY
 
 Set the Y component
 
-**Parameters**
+#### Parameters
 
--   `y` **[Number][36]** the Y component of [x, y, z]
+-   `y` **[Number][60]** the Y component of [x, y, z]
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### setZ
 
 Set the Z component
 
-**Parameters**
+#### Parameters
 
--   `z` **[Number][36]** the Z component of [x, y, z]
+-   `z` **[Number][60]** the Z component of [x, y, z]
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### enableMirrorX
 
 If true, the method `getVector3Ds()` will return the X mirrored point in
 addition to the regular one
 
-**Parameters**
+#### Parameters
 
--   `en` **[Boolean][38]** true to mirror, false to not mirror
+-   `en` **[Boolean][62]** true to mirror, false to not mirror
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### enableMirrorY
 
 If true, the method `getAnchorPoints()` will return the Y mirrored point in
 addition to the regular one
 
-**Parameters**
+#### Parameters
 
--   `en` **[Boolean][38]** true to mirror, false to not mirror
+-   `en` **[Boolean][62]** true to mirror, false to not mirror
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### enableMirrorZ
 
 If true, the method `getAnchorPoints()` will return the Z mirrored point in
 addition to the regular one
 
-**Parameters**
+#### Parameters
 
--   `en` **[Boolean][38]** true to mirror, false to not mirror
+-   `en` **[Boolean][62]** true to mirror, false to not mirror
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### enableRadialMirrorX
 
 If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 addition to the regular one
 
-**Parameters**
+#### Parameters
 
--   `en` **[Boolean][38]** true to symetry, false to not symetry
+-   `en` **[Boolean][62]** true to symetry, false to not symetry
 
-Returns **[AnchorPoint][37]** return `this` to enable chaining
+Returns **[AnchorPoint][61]** return `this` to enable chaining
 
 ### getAnchorPoints
 
@@ -137,32 +161,32 @@ Everything to handle a collection of AnchorPoints
 Add a new anchor point to the collection. An ID will be automatically
 created for it so that it can be retrieved later.
 
-**Parameters**
+#### Parameters
 
--   `pos` **[Array][35]** position as [x, y, z]
+-   `pos` **[Array][59]** position as [x, y, z]
 
-Returns **[Object][39]** anchor point info as {id: string, anchorPoint: AnchorPoint}
+Returns **[Object][63]** anchor point info as {id: string, anchorPoint: AnchorPoint}
 
 ### get
 
 Get an anchor point from the collection
 
-**Parameters**
+#### Parameters
 
--   `id` **[String][40]** the id of the anchor point
+-   `id` **[String][64]** the id of the anchor point
 
-Returns **([AnchorPoint][37] | null)** 
+Returns **([AnchorPoint][61] | null)** 
 
 ### delete
 
 Delete the anchor point with the given id from within the collection.
 To make it not entirely destructive, the point is returned by this method.
 
-**Parameters**
+#### Parameters
 
--   `id` **[String][40]** the id of the anchor point
+-   `id` **[String][64]** the id of the anchor point
 
-Returns **([AnchorPoint][37] | null)** 
+Returns **([AnchorPoint][61] | null)** 
 
 ### getAllAnchorPoints
 
@@ -183,63 +207,84 @@ This class is mostly for being inherited from.
 
 Define an event, with a name associated with a function
 
-**Parameters**
+#### Parameters
 
--   `eventName` **[String][40]** Name to give to the event
--   `callback` **[Function][41]** function associated to the even
+-   `eventName` **[String][64]** Name to give to the event
+-   `callback` **[Function][65]** function associated to the even
 
-## constructor
+## HullView
 
-Build the HullView
+The HullView in in charge of showing the convext hull
 
-**Parameters**
+### Parameters
 
 -   `scene` **THREE.Scene** 
 -   `anchorPointCollection`  
 
-## onRenderNeeded
+### onRenderNeeded
 
 Event called when the webgl context needs to be re-rendered
 
-**Parameters**
+#### Parameters
 
--   `cb` **[Function][41]** callback for when a rendering is needed
+-   `cb` **[Function][65]** callback for when a rendering is needed
 
-## updateAnchorPoints
+### updateAnchorPoints
 
 Build the spherical hints for each anchor points and add them to the scene
 
 Returns **\[type]** [description]
 
-## buildConvexHull
+### buildConvexHull
 
 Build the convex hull and add it to the scene
 
 Returns **\[type]** [description]
 
-## showAnchorPoint
+### showAnchorPoint
 
 Show or hide the anchor points
 
-**Parameters**
+#### Parameters
 
--   `b` **[Boolean][38]** true to show, false to hide
+-   `b` **[Boolean][62]** true to show, false to hide
 
-## showConvexHull
+### showConvexHull
 
 Show or hide the convex hull
 
-**Parameters**
+#### Parameters
 
--   `b` **[Boolean][38]** true to show, false to hide
+-   `b` **[Boolean][62]** true to show, false to hide
 
-## wireframe
+### wireframe
 
 Enable or disable wireframe rendering for the hull
 
-**Parameters**
+#### Parameters
 
--   `b` **[Boolean][38]** true to enable wireframe, false to enable regular (phong) material
+-   `b` **[Boolean][62]** true to enable wireframe, false to enable regular (phong) material
+
+## Rocknhull
+
+Entry point of the Rocknhull project core. Initialize a few things and exposes
+its instance of `AnchorPointCollection` and `HullView`
+
+### Parameters
+
+-   `div`  
+
+### getAnchorPointCollection
+
+Get the HullView instance
+
+Returns **[HullView][66]** 
+
+### getHullView
+
+Get the HullView instance
+
+Returns **[HullView][66]** 
 
 ## ThreeContext
 
@@ -249,7 +294,7 @@ ThreeContext creates a WebGL context using THREEjs. It also handle mouse control
 An event can be associated to a ThreeContext instance: `onRaycast` with the method
 `.on("onRaycast", function(s){...})` where `s` is the section object being raycasted.
 
-**Parameters**
+### Parameters
 
 -   `divObj` **DONObject** the div object as a DOM element.
     Will be used to host the WebGL context
@@ -269,15 +314,15 @@ Returns **THREE.Scene**
 
 Get the field of view angle of the camera, in degrees
 
-Returns **[Number][36]** 
+Returns **[Number][60]** 
 
 ### setCameraFieldOfView
 
 Define the camera field of view, in degrees
 
-**Parameters**
+#### Parameters
 
--   `fov` **[Number][36]** the fov
+-   `fov` **[Number][60]** the fov
 
 ### getSnapshotData
 
@@ -303,90 +348,140 @@ Handy function to deal with option object we pass in argument of function.
 Allows the return of a default value if the `optionName` is not available in
 the `optionObj`
 
-**Parameters**
+#### Parameters
 
--   `optionObj` **[Object][39]** the object that contain the options
--   `optionName` **[String][40]** the name of the option desired, attribute of `optionObj`
+-   `optionObj` **[Object][63]** the object that contain the options
+-   `optionName` **[String][64]** the name of the option desired, attribute of `optionObj`
 -   `optionDefaultValue` **any** default values to be returned in case `optionName` is not an attribute of `optionObj`
 
 [1]: #anchorpoint
 
-[2]: #setx
+[2]: #parameters
 
-[3]: #sety
+[3]: #setx
 
-[4]: #setz
+[4]: #parameters-1
 
-[5]: #enablemirrorx
+[5]: #sety
 
-[6]: #enablemirrory
+[6]: #parameters-2
 
-[7]: #enablemirrorz
+[7]: #setz
 
-[8]: #enableradialmirrorx
+[8]: #parameters-3
 
-[9]: #getanchorpoints
+[9]: #enablemirrorx
 
-[10]: #anchorpointcollection
+[10]: #parameters-4
 
-[11]: #add
+[11]: #enablemirrory
 
-[12]: #get
+[12]: #parameters-5
 
-[13]: #delete
+[13]: #enablemirrorz
 
-[14]: #getallanchorpoints
+[14]: #parameters-6
 
-[15]: #deleteallanchorpoints
+[15]: #enableradialmirrorx
 
-[16]: #eventmanager
+[16]: #parameters-7
 
-[17]: #on
+[17]: #getanchorpoints
 
-[18]: #constructor
+[18]: #anchorpointcollection
 
-[19]: #onrenderneeded
+[19]: #add
 
-[20]: #updateanchorpoints
+[20]: #parameters-8
 
-[21]: #buildconvexhull
+[21]: #get
 
-[22]: #showanchorpoint
+[22]: #parameters-9
 
-[23]: #showconvexhull
+[23]: #delete
 
-[24]: #wireframe
+[24]: #parameters-10
 
-[25]: #threecontext
+[25]: #getallanchorpoints
 
-[26]: #addsampleshape
+[26]: #deleteallanchorpoints
 
-[27]: #getscene
+[27]: #eventmanager
 
-[28]: #getcamerafieldofview
+[28]: #on
 
-[29]: #setcamerafieldofview
+[29]: #parameters-11
 
-[30]: #getsnapshotdata
+[30]: #hullview
 
-[31]: #destroy
+[31]: #parameters-12
 
-[32]: #three
+[32]: #onrenderneeded
 
-[33]: #tools
+[33]: #parameters-13
 
-[34]: #getoption
+[34]: #updateanchorpoints
 
-[35]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[35]: #buildconvexhull
 
-[36]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[36]: #showanchorpoint
 
-[37]: #anchorpoint
+[37]: #parameters-14
 
-[38]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[38]: #showconvexhull
 
-[39]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[39]: #parameters-15
 
-[40]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[40]: #wireframe
 
-[41]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[41]: #parameters-16
+
+[42]: #rocknhull
+
+[43]: #parameters-17
+
+[44]: #getanchorpointcollection
+
+[45]: #gethullview
+
+[46]: #threecontext
+
+[47]: #parameters-18
+
+[48]: #addsampleshape
+
+[49]: #getscene
+
+[50]: #getcamerafieldofview
+
+[51]: #setcamerafieldofview
+
+[52]: #parameters-19
+
+[53]: #getsnapshotdata
+
+[54]: #destroy
+
+[55]: #three
+
+[56]: #tools
+
+[57]: #getoption
+
+[58]: #parameters-20
+
+[59]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[60]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[61]: #anchorpoint
+
+[62]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[63]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[65]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[66]: #hullview

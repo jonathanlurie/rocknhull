@@ -18,7 +18,7 @@
   "author": "Jonathan Lurie",
   "license": "MIT",
   "devDependencies": {
-    "documentation": "^6.1.0",
+    "documentation": "^9.1.1",
     "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
