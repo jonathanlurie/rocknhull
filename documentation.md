@@ -2,17 +2,177 @@
 
 ### Table of Contents
 
--   [EventManager][1]
-    -   [on][2]
--   [ThreeContext][3]
-    -   [addSampleShape][4]
-    -   [getScene][5]
-    -   [getCameraFieldOfView][6]
-    -   [setCameraFieldOfView][7]
-    -   [getSnapshotData][8]
-    -   [destroy][9]
--   [Tools][10]
-    -   [getOption][11]
+-   [AnchorPoint][1]
+    -   [setX][2]
+    -   [setY][3]
+    -   [setZ][4]
+    -   [enableMirrorX][5]
+    -   [enableMirrorY][6]
+    -   [enableMirrorZ][7]
+    -   [enableRadialMirrorX][8]
+    -   [getAnchorPoints][9]
+-   [AnchorPointCollection][10]
+    -   [add][11]
+    -   [get][12]
+    -   [delete][13]
+    -   [getAllAnchorPoints][14]
+    -   [deleteAllAnchorPoints][15]
+-   [EventManager][16]
+    -   [on][17]
+-   [constructor][18]
+-   [onRenderNeeded][19]
+-   [updateAnchorPoints][20]
+-   [buildConvexHull][21]
+-   [showAnchorPoint][22]
+-   [showConvexHull][23]
+-   [wireframe][24]
+-   [ThreeContext][25]
+    -   [addSampleShape][26]
+    -   [getScene][27]
+    -   [getCameraFieldOfView][28]
+    -   [setCameraFieldOfView][29]
+    -   [getSnapshotData][30]
+    -   [destroy][31]
+-   [THREE][32]
+-   [Tools][33]
+    -   [getOption][34]
+
+## AnchorPoint
+
+An instance of AnchorPoint is a logic representation of a point in a 3D
+cartesian space as well as all its symmetrical clone.
+
+Note: this is not a graphic representation.
+
+**Parameters**
+
+-   `pos` **[Array][35]** position as [x, y, z]
+
+### setX
+
+Set the X component
+
+**Parameters**
+
+-   `x` **[Number][36]** the X component of [x, y, z]
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### setY
+
+Set the Y component
+
+**Parameters**
+
+-   `y` **[Number][36]** the Y component of [x, y, z]
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### setZ
+
+Set the Z component
+
+**Parameters**
+
+-   `z` **[Number][36]** the Z component of [x, y, z]
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### enableMirrorX
+
+If true, the method `getVector3Ds()` will return the X mirrored point in
+addition to the regular one
+
+**Parameters**
+
+-   `en` **[Boolean][38]** true to mirror, false to not mirror
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### enableMirrorY
+
+If true, the method `getAnchorPoints()` will return the Y mirrored point in
+addition to the regular one
+
+**Parameters**
+
+-   `en` **[Boolean][38]** true to mirror, false to not mirror
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### enableMirrorZ
+
+If true, the method `getAnchorPoints()` will return the Z mirrored point in
+addition to the regular one
+
+**Parameters**
+
+-   `en` **[Boolean][38]** true to mirror, false to not mirror
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### enableRadialMirrorX
+
+If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+addition to the regular one
+
+**Parameters**
+
+-   `en` **[Boolean][38]** true to symetry, false to not symetry
+
+Returns **[AnchorPoint][37]** return `this` to enable chaining
+
+### getAnchorPoints
+
+Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
+
+Returns **\[THREE.Vector3]** An array of THREE.Vector3 built on te fly
+
+## AnchorPointCollection
+
+Everything to handle a collection of AnchorPoints
+
+### add
+
+Add a new anchor point to the collection. An ID will be automatically
+created for it so that it can be retrieved later.
+
+**Parameters**
+
+-   `pos` **[Array][35]** position as [x, y, z]
+
+Returns **[Object][39]** anchor point info as {id: string, anchorPoint: AnchorPoint}
+
+### get
+
+Get an anchor point from the collection
+
+**Parameters**
+
+-   `id` **[String][40]** the id of the anchor point
+
+Returns **([AnchorPoint][37] | null)** 
+
+### delete
+
+Delete the anchor point with the given id from within the collection.
+To make it not entirely destructive, the point is returned by this method.
+
+**Parameters**
+
+-   `id` **[String][40]** the id of the anchor point
+
+Returns **([AnchorPoint][37] | null)** 
+
+### getAllAnchorPoints
+
+Generate an array of all the anchor point of this collection
+
+Returns **\[THREE.Vector3]** array of THREE.Vector3
+
+### deleteAllAnchorPoints
+
+Delete all the anchor points
 
 ## EventManager
 
@@ -25,8 +185,61 @@ Define an event, with a name associated with a function
 
 **Parameters**
 
--   `eventName` **[String][12]** Name to give to the event
--   `callback` **[Function][13]** function associated to the even
+-   `eventName` **[String][40]** Name to give to the event
+-   `callback` **[Function][41]** function associated to the even
+
+## constructor
+
+Build the HullView
+
+**Parameters**
+
+-   `scene` **THREE.Scene** 
+-   `anchorPointCollection`  
+
+## onRenderNeeded
+
+Event called when the webgl context needs to be re-rendered
+
+**Parameters**
+
+-   `cb` **[Function][41]** callback for when a rendering is needed
+
+## updateAnchorPoints
+
+Build the spherical hints for each anchor points and add them to the scene
+
+Returns **\[type]** [description]
+
+## buildConvexHull
+
+Build the convex hull and add it to the scene
+
+Returns **\[type]** [description]
+
+## showAnchorPoint
+
+Show or hide the anchor points
+
+**Parameters**
+
+-   `b` **[Boolean][38]** true to show, false to hide
+
+## showConvexHull
+
+Show or hide the convex hull
+
+**Parameters**
+
+-   `b` **[Boolean][38]** true to show, false to hide
+
+## wireframe
+
+Enable or disable wireframe rendering for the hull
+
+**Parameters**
+
+-   `b` **[Boolean][38]** true to enable wireframe, false to enable regular (phong) material
 
 ## ThreeContext
 
@@ -56,7 +269,7 @@ Returns **THREE.Scene**
 
 Get the field of view angle of the camera, in degrees
 
-Returns **[Number][14]** 
+Returns **[Number][36]** 
 
 ### setCameraFieldOfView
 
@@ -64,7 +277,7 @@ Define the camera field of view, in degrees
 
 **Parameters**
 
--   `fov` **[Number][14]** the fov
+-   `fov` **[Number][36]** the fov
 
 ### getSnapshotData
 
@@ -73,6 +286,12 @@ Get the png image data as base64, in order to later, export as a file
 ### destroy
 
 Kills the scene, interaction, animation and reset all objects to null
+
+## THREE
+
+**Meta**
+
+-   **author**: erich666 / http&#x3A;//erichaines.com
 
 ## Tools
 
@@ -86,36 +305,88 @@ the `optionObj`
 
 **Parameters**
 
--   `optionObj` **[Object][15]** the object that contain the options
--   `optionName` **[String][12]** the name of the option desired, attribute of `optionObj`
+-   `optionObj` **[Object][39]** the object that contain the options
+-   `optionName` **[String][40]** the name of the option desired, attribute of `optionObj`
 -   `optionDefaultValue` **any** default values to be returned in case `optionName` is not an attribute of `optionObj`
 
-[1]: #eventmanager
+[1]: #anchorpoint
 
-[2]: #on
+[2]: #setx
 
-[3]: #threecontext
+[3]: #sety
 
-[4]: #addsampleshape
+[4]: #setz
 
-[5]: #getscene
+[5]: #enablemirrorx
 
-[6]: #getcamerafieldofview
+[6]: #enablemirrory
 
-[7]: #setcamerafieldofview
+[7]: #enablemirrorz
 
-[8]: #getsnapshotdata
+[8]: #enableradialmirrorx
 
-[9]: #destroy
+[9]: #getanchorpoints
 
-[10]: #tools
+[10]: #anchorpointcollection
 
-[11]: #getoption
+[11]: #add
 
-[12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[12]: #get
 
-[13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[13]: #delete
 
-[14]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[14]: #getallanchorpoints
 
-[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[15]: #deleteallanchorpoints
+
+[16]: #eventmanager
+
+[17]: #on
+
+[18]: #constructor
+
+[19]: #onrenderneeded
+
+[20]: #updateanchorpoints
+
+[21]: #buildconvexhull
+
+[22]: #showanchorpoint
+
+[23]: #showconvexhull
+
+[24]: #wireframe
+
+[25]: #threecontext
+
+[26]: #addsampleshape
+
+[27]: #getscene
+
+[28]: #getcamerafieldofview
+
+[29]: #setcamerafieldofview
+
+[30]: #getsnapshotdata
+
+[31]: #destroy
+
+[32]: #three
+
+[33]: #tools
+
+[34]: #getoption
+
+[35]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[36]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[37]: #anchorpoint
+
+[38]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[39]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[40]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[41]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function

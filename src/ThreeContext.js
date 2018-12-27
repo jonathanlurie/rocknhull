@@ -40,8 +40,9 @@ export default class ThreeContext extends EventManager {
     this._scene.background = fogColor
     this._scene.fog = new THREE.Fog(fogColor, 1000, 1500)
 
-
-    let axesHelper = new THREE.AxesHelper( 1000 )
+    let axesHelper = new THREE.AxesHelper( 100 )
+    // just so that it remain visible on top of the grid:
+    axesHelper.position.y = 0.05
     this._scene.add( axesHelper )
 
     this._gridContainer = new THREE.Object3D()

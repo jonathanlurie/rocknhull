@@ -14,7 +14,7 @@ export default class AnchorPoint {
    */
   constructor(pos){
     this._position = pos
-    this._mirror = [false, false, false, false]
+    this._mirror = [false, false, false, false, false, false, false]
   }
 
 
@@ -93,19 +93,54 @@ export default class AnchorPoint {
    * @param  {Boolean} en - true to symetry, false to not symetry
    * @return {AnchorPoint} return `this` to enable chaining
    */
-  enableRadialMirror(en) {
+  enableRadialMirrorX(en) {
     this._mirror[3] = en
     return this
   }
 
 
-  /*
-  TODO:
-    - remove radialMirror
-    - add radialX
-    - add radialY
-    - add radialZ
-  */
+  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+   * addition to the regular one, using the X axis as rotation axis.
+   * @param  {Boolean} en - true to symetry, false to not symetry
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
+  enableRadialMirrorY(en) {
+    this._mirror[4] = en
+    return this
+  }
+
+  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+   * addition to the regular one, using the X axis as rotation axis.
+   * @param  {Boolean} en - true to symetry, false to not symetry
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
+  enableRadialMirrorZ(en) {
+    this._mirror[5] = en
+    return this
+  }
+
+
+  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+   * addition to the regular one, using the X axis as rotation axis.
+   * @param  {Boolean} en - true to symetry, false to not symetry
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
+  enableRadialMirrorZ(en) {
+    this._mirror[5] = en
+    return this
+  }
+
+
+  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+   * addition to the regular one, using the origin as rotation point.
+   * @param  {Boolean} en - true to symetry, false to not symetry
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
+  enableRadialMirrorO(en) {
+    this._mirror[6] = en
+    return this
+  }
+
 
   /**
    * Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
@@ -127,6 +162,18 @@ export default class AnchorPoint {
     }
 
     if (this._mirror[3]) {
+      points.push(new THREE.Vector3(this._position[0], -this._position[1], -this._position[2]))
+    }
+
+    if (this._mirror[4]) {
+      points.push(new THREE.Vector3(-this._position[0], this._position[1], -this._position[2]))
+    }
+
+    if (this._mirror[5]) {
+      points.push(new THREE.Vector3(-this._position[0], -this._position[1], this._position[2]))
+    }
+
+    if (this._mirror[6]) {
       points.push(new THREE.Vector3(-this._position[0], -this._position[1], -this._position[2]))
     }
 

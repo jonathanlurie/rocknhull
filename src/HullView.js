@@ -118,4 +118,34 @@ export default class HullView {
   }
 
 
+  /**
+   * Show or hide the anchor points
+   * @param  {Boolean} b - true to show, false to hide
+   */
+  showAnchorPoint (b) {
+    this._anchorPointsContainer.visible = b
+    this._on.renderNeeded()
+  }
+
+
+  /**
+   * Show or hide the convex hull
+   * @param  {Boolean} b - true to show, false to hide
+   */
+  showConvexHull (b) {
+    this._convexHullContainer.visible = b
+    this._on.renderNeeded()
+  }
+
+
+  /**
+   * Enable or disable wireframe rendering for the hull
+   * @param  {Boolean} b - true to enable wireframe, false to enable regular (phong) material
+   */
+  wireframe (b) {
+    this._convexHullMaterial.wireframe = b
+    this._on.renderNeeded()
+  }
+
+
 }

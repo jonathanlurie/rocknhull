@@ -47969,8 +47969,9 @@
 	    this._scene.background = fogColor;
 	    this._scene.fog = new Fog(fogColor, 1000, 1500);
 
-
-	    let axesHelper = new AxesHelper( 1000 );
+	    let axesHelper = new AxesHelper( 100 );
+	    // just so that it remain visible on top of the grid:
+	    axesHelper.position.y = 0.05;
 	    this._scene.add( axesHelper );
 
 	    this._gridContainer = new Object3D();
@@ -48149,7 +48150,7 @@
 	   */
 	  constructor(pos){
 	    this._position = pos;
-	    this._mirror = [false, false, false, false];
+	    this._mirror = [false, false, false, false, false, false, false];
 	  }
 
 
@@ -48228,19 +48229,54 @@
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
 	   */
-	  enableRadialMirror(en) {
+	  enableRadialMirrorX(en) {
 	    this._mirror[3] = en;
 	    return this
 	  }
 
 
-	  /*
-	  TODO:
-	    - remove radialMirror
-	    - add radialX
-	    - add radialY
-	    - add radialZ
-	  */
+	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	   * addition to the regular one, using the X axis as rotation axis.
+	   * @param  {Boolean} en - true to symetry, false to not symetry
+	   * @return {AnchorPoint} return `this` to enable chaining
+	   */
+	  enableRadialMirrorY(en) {
+	    this._mirror[4] = en;
+	    return this
+	  }
+
+	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	   * addition to the regular one, using the X axis as rotation axis.
+	   * @param  {Boolean} en - true to symetry, false to not symetry
+	   * @return {AnchorPoint} return `this` to enable chaining
+	   */
+	  enableRadialMirrorZ(en) {
+	    this._mirror[5] = en;
+	    return this
+	  }
+
+
+	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	   * addition to the regular one, using the X axis as rotation axis.
+	   * @param  {Boolean} en - true to symetry, false to not symetry
+	   * @return {AnchorPoint} return `this` to enable chaining
+	   */
+	  enableRadialMirrorZ(en) {
+	    this._mirror[5] = en;
+	    return this
+	  }
+
+
+	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	   * addition to the regular one, using the origin as rotation point.
+	   * @param  {Boolean} en - true to symetry, false to not symetry
+	   * @return {AnchorPoint} return `this` to enable chaining
+	   */
+	  enableRadialMirrorO(en) {
+	    this._mirror[6] = en;
+	    return this
+	  }
+
 
 	  /**
 	   * Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
@@ -48262,6 +48298,18 @@
 	    }
 
 	    if (this._mirror[3]) {
+	      points.push(new Vector3(this._position[0], -this._position[1], -this._position[2]));
+	    }
+
+	    if (this._mirror[4]) {
+	      points.push(new Vector3(-this._position[0], this._position[1], -this._position[2]));
+	    }
+
+	    if (this._mirror[5]) {
+	      points.push(new Vector3(-this._position[0], -this._position[1], this._position[2]));
+	    }
+
+	    if (this._mirror[6]) {
 	      points.push(new Vector3(-this._position[0], -this._position[1], -this._position[2]));
 	    }
 
@@ -48344,6 +48392,9 @@
 	  }
 
 
+	  /**
+	   * Delete all the anchor points
+	   */
 	  deleteAllAnchorPoints () {
 	    this._collection = {};
 	  }
@@ -49475,6 +49526,36 @@
 	    this._on.renderNeeded();
 
 	    return convexMesh
+	  }
+
+
+	  /**
+	   * Show or hide the anchor points
+	   * @param  {Boolean} b - true to show, false to hide
+	   */
+	  showAnchorPoint (b) {
+	    this._anchorPointsContainer.visible = b;
+	    this._on.renderNeeded();
+	  }
+
+
+	  /**
+	   * Show or hide the convex hull
+	   * @param  {Boolean} b - true to show, false to hide
+	   */
+	  showConvexHull (b) {
+	    this._convexHullContainer.visible = b;
+	    this._on.renderNeeded();
+	  }
+
+
+	  /**
+	   * Enable or disable wireframe rendering for the hull
+	   * @param  {Boolean} b - true to enable wireframe, false to enable regular (phong) material
+	   */
+	  wireframe (b) {
+	    this._convexHullMaterial.wireframe = b;
+	    this._on.renderNeeded();
 	  }
 
 

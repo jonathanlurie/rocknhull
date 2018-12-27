@@ -73,6 +73,9 @@ export default class AnchorPointCollection {
   }
 
 
+  /**
+   * Delete all the anchor points
+   */
   deleteAllAnchorPoints () {
     this._collection = {}
   }

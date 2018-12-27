@@ -47,27 +47,12 @@
 
     let threedeediv = document.getElementById( 'threedeediv1' )
     let rnh = new rocknhull.Rocknhull(threedeediv)
-
-    console.log(rnh.getAnchorPointCollection())
-    console.log(rnh.getHullView())
-
     let apc = rnh.getAnchorPointCollection()
     let hv = rnh.getHullView()
 
 
-    apc.add([15, 10, 50]).anchorPoint
-    .enableMirrorX(true)
-    .enableMirrorY(true)
-    .enableMirrorZ(true)
-    //.enableRadialMirror(true)
-
-    hv.updateAnchorPoints()
-    hv. buildConvexHull()
-
-
-   // makeRandomHull()
-
     function makeRandomHull (nbPoints=10, xSpan=100, ySpan=100, zSpan=100) {
+      console.time('build')
       apc.deleteAllAnchorPoints()
 
       for (let i=0; i<nbPoints; i++) {
@@ -76,14 +61,48 @@
         let z = Math.random() * zSpan - zSpan / 2
 
         apc.add([x, y, z]).anchorPoint
+        /*
         .enableMirrorX(true)
         .enableMirrorY(true)
         .enableMirrorZ(true)
-        .enableRadialMirror(true)
+        .enableRadialMirrorX(true)
+        .enableRadialMirrorY(true)
+        .enableRadialMirrorZ(true)
+        .enableRadialMirrorO(true)
+        */
       }
 
       hv.updateAnchorPoints()
-      // hv. buildConvexHull()
+      hv. buildConvexHull()
+      console.timeEnd('build')
+    }
+
+
+    function makeRandomHullSpheric (nbPoints=10, radius=100) {
+      console.time('build')
+      apc.deleteAllAnchorPoints()
+
+      for (let i=0; i<nbPoints; i++) {
+        // taken from
+        // https://karthikkaranth.me/blog/generating-random-points-in-a-sphere/
+        let u = Math.random()
+        let v = Math.random()
+        let theta = u * 2.0 * Math.PI
+        let phi = Math.acos(2.0 * v - 1.0)
+        let sinTheta = Math.sin(theta)
+        let cosTheta = Math.cos(theta)
+        let sinPhi = Math.sin(phi)
+        let cosPhi = Math.cos(phi)
+        let x = radius * sinPhi * cosTheta
+        let y = radius * sinPhi * sinTheta
+        let z = radius * cosPhi
+
+        apc.add([x, y, z]).anchorPoint
+      }
+
+      hv.updateAnchorPoints()
+      hv. buildConvexHull()
+      console.timeEnd('build')
     }
 
   </script>
