@@ -1,0 +1,99 @@
+<div ref:threedeediv></div>
+<Topbar on:addPoint="addPoint()" on:buildhull="buildhull()"/>
+<Sidebar ref:sidebar/>
+
+<style>
+
+  ref:threedeediv {
+    position: fixed;
+    width: calc(100vw - 200px);
+    height: calc(100vh - 50px);
+    left: 0;
+    bottom: 0;
+    background-color: #AAF;
+  }
+
+</style>
+
+
+<script>
+  // import createRenderer from './createRenderer.js';
+  import rocknhull from 'rocknhull'
+  import Sidebar from './Sidebar.html'
+  import Topbar from './Topbar.html'
+
+  export default {
+    components: {
+      Sidebar,
+      Topbar
+    },
+
+    data() {
+      return {
+        rock: null,
+      }
+    },
+
+    oncreate() {
+      const threedeediv = this.refs.threedeediv
+      let rock = new rocknhull.Rocknhull(threedeediv)
+      this.set({rock: rock})
+
+
+
+    },
+
+    methods: {
+      addPoint() {
+        let rock = this.get().rock
+        let apc = rock.getAnchorPointCollection()
+        let hv = rock.getHullView()
+
+        // adding the point in the internal logic of rocknhull
+        let pointInfo = apc.add([0, 0, 0])
+        let anchorPoint = pointInfo.anchorPoint
+        // console.log(pointInfo)
+
+        // adding the UI for this point
+        const sidebar = this.refs.sidebar
+        let pointComponent = sidebar.addPoint(pointInfo.id)
+        // console.log(pointComponent)
+
+        // bind some events
+        pointComponent.on('modified', function(data){
+          hv.deleteConvexHull()
+          let changedState = data.changedState
+
+          if ('x' in changedState) {
+            anchorPoint.setX(changedState.x)
+          }else if ('y' in changedState) {
+            anchorPoint.setY(changedState.y)
+          }else if ('z' in changedState) {
+            anchorPoint.setZ(changedState.z)
+          }else {
+            let k = Object.keys(changedState)[0]
+            anchorPoint['enable' + k](changedState[k])
+          }
+          hv.updateAnchorPoints()
+        })
+
+        pointComponent.on('deleted', function(data){
+          hv.deleteConvexHull()
+          let pointId = data.pointId
+          apc.delete(pointId)
+          hv.updateAnchorPoints()
+        })
+
+        // showing a sphere
+        hv.updateAnchorPoints()
+      },
+
+
+      buildhull() {
+        let rock = this.get().rock
+        let hv = rock.getHullView()
+        hv.buildConvexHull()
+      }
+    }
+  }
+</script>

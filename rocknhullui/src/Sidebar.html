@@ -1,0 +1,54 @@
+<div ref:container class="container">
+  The Sidebar
+
+  <!--
+  <Point pointId="1"/>
+  <Point pointId="2"/>
+  <Point pointId="3"/>
+  -->
+
+</div>
+
+
+<style>
+  .container {
+    position: fixed;
+    width: 235px;
+    height: calc(100vh - 50px);
+    bottom: 0;
+    right: 0;
+    background-color: #FAA;
+    overflow-y: scroll;
+  }
+</style>
+
+
+<script>
+  import Point from './Point.html'
+
+  export default {
+    components: {
+      Point,
+    },
+
+    oncreate() {
+      //const threedeediv = this.refs.threedeediv
+
+      //console.log(this)
+    },
+
+
+    methods: {
+
+      addPoint(pointId) {
+        return new Point({
+          target: this.refs.container,
+          data: {
+            pointId: pointId
+          }
+        })
+      },
+
+    }
+  }
+</script>

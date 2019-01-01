@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="toolbar">
+    <div class="bt" on:click="fire('addPoint')">
+      Add point
+    </div>
+
+    <div class="bt" on:click="fire('buildhull')">
+      Build hull
+    </div>
+  </div>
+
+</div>
+
+
+<style>
+  .container {
+    position: fixed;
+    display: inline-flex;
+    width: 100vw;
+    height: 50px;
+    top: 0;
+    background-color: #AFA;
+  }
+
+  .toolbar {
+    display: inline-flex;
+    margin: 7px;
+  }
+
+  .bt {
+    width: 150px;
+    height: 35px;
+    background: #1bca1b;
+    font-size: 20px;
+    color: #FFF;
+    line-height: 35px;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 5px 0 5px;
+    user-select: none;
+  }
+</style>
+
+
+
+<script>
+
+  export default {
+
+    data() {
+      return {
+        thing: "thing 0"
+      };
+    },
+
+    oncreate() {
+      this.set({'thing': "thing 1"})
+
+    },
+
+
+    methods: {
+      /*
+      addPoint() {
+        console.log('HELLO')
+      },
+      */
+
+    }
+  }
+</script>

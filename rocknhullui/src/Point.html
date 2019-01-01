@@ -1,0 +1,153 @@
+<!--
+  Fires events:
+    - 'modified' with arg {pointId: String, changedState: Object}
+    - 'deleted' with arg {pointId: String}
+
+-->
+
+
+<div class="container">
+  {pointId}
+  <div class="setting-title">Position</div>
+  <div class="row-of-3">
+    <input type="number" step="0.1" bind:value=x>
+    <input type="number" step="0.1" bind:value=y>
+    <input type="number" step="0.1" bind:value=z>
+  </div>
+
+  <div class="setting-title">Symmetry</div>
+  <div class="row-of-7">
+    <div class="labeled-checkbox">|x <input type="checkbox" bind:checked=MirrorX></div>
+    <div class="labeled-checkbox">|y <input type="checkbox" bind:checked=MirrorY></div>
+    <div class="labeled-checkbox">|z <input type="checkbox" bind:checked=MirrorZ></div>
+    <div class="labeled-checkbox">øx <input type="checkbox" bind:checked=RadialMirrorX></div>
+    <div class="labeled-checkbox">øy <input type="checkbox" bind:checked=RadialMirrorY></div>
+    <div class="labeled-checkbox">øz <input type="checkbox" bind:checked=RadialMirrorZ></div>
+    <div class="labeled-checkbox">øo <input type="checkbox" bind:checked=RadialMirrorO></div>
+  </div>
+
+  <div ref:deleteBt on:click="destroy()">
+    Delete
+  </div>
+</div>
+
+
+<style>
+
+  input {
+    border: none;
+    text-align: center;
+  }
+
+  .container {
+    width: 100%;
+    border-bottom: dashed 3px rgba(0, 0, 0, 0.5);
+    padding: 10px 0 10px 0;
+  }
+
+  .setting-title {
+    width: 100%;
+    /*border-top: dashed 1px rgba(0, 0, 0, 0.1);*/
+    font-size: 16px;
+    padding-top: 10px;
+  }
+
+  .row-of-3 {
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    grid-gap: 5%;
+  }
+
+  .row-of-4 {
+    display: grid;
+    grid-template-columns: 22% 22% 22% 22%;
+    grid-gap: 4%;
+  }
+
+  .row-of-7 {
+    display: grid;
+    grid-template-columns: 13% 13% 13% 13% 13% 13% 13%;
+    grid-gap: 1.5%;
+  }
+
+  .labeled-checkbox {
+    text-align: center;
+  }
+
+  ref:deleteBt{
+    width: 100%;
+    height: 35px;
+    background: #ca1b1b;
+    font-size: 20px;
+    color: #FFF;
+    line-height: 35px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+</style>
+
+
+<script>
+
+  export default {
+    data() {
+      return {
+        x: 0,
+        y: 0,
+        z: 0,
+
+        // those have their first letter capitalized to match the suffix of the
+        // corresponding Rocknhull method, which are camel-cased
+        MirrorX: false,
+        MirrorY: false,
+        MirrorZ: false,
+        RadialMirrorX: false,
+        RadialMirrorY: false,
+        RadialMirrorZ: false,
+        RadialMirrorO: false,
+
+      }
+    },
+
+    onstate({ changed, current, previous }) {
+      // this fires before oncreate, and on every state change.
+      // the first time it runs, `previous` is undefined
+      if (previous === undefined) {
+        return
+      }
+
+
+      let changedState = {}
+      let stateKeys = Object.keys(previous)
+
+      for (let i=0; i<stateKeys.length; i++) {
+        let k = stateKeys[i]
+        if (previous[k] !== current[k]) {
+          changedState[k] = current[k]
+        }
+      }
+
+      let eventArg = {
+        pointId: this.get().pointId,
+        changedState: changedState
+      }
+
+      this.fire('modified', eventArg)
+    },
+
+    oncreate() {
+
+      //const threedeediv = this.refs.threedeediv
+
+    },
+
+    ondestroy() {
+      // TODO: throw an event to remove the 3D point"
+      this.fire('deleted', {pointId: this.get().pointId})
+    }
+
+
+
+  }
+</script>

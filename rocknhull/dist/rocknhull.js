@@ -49488,6 +49488,14 @@
 
 
 	  /**
+	   * Delete the convex hull
+	   */
+	  deleteConvexHull () {
+	    this._flushConvexHullContainer();
+	  }
+
+
+	  /**
 	   * Build the spherical hints for each anchor points and add them to the scene
 	   * @return {[type]} [description]
 	   */
@@ -49610,3 +49618,4 @@
 	return main;
 
 })));
+//# sourceMappingURL=rocknhull.js.map
