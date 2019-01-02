@@ -1,24 +1,39 @@
 <div ref:container class="container">
-  The Sidebar
-
-  <!--
-  <Point pointId="1"/>
-  <Point pointId="2"/>
-  <Point pointId="3"/>
-  -->
-
+  {#if isEmpty}
+    <div class="placeholder">
+      Add points from the menu bar
+    </div>
+  {/if}
 </div>
 
 
 <style>
   .container {
     position: fixed;
-    width: 235px;
+    width: 255px;
     height: calc(100vh - 50px);
     bottom: 0;
     right: 0;
-    background-color: #FAA;
+    background-color: #15777b;
     overflow-y: scroll;
+  }
+
+  .placeholder {
+    color: #43a7ad;
+    font-size: 25px;
+    text-align: center;
+    height: fit-content;
+    width: 60%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    padding: 10%;
+    border: #3c9398 2px solid;
+    border-radius: 4px;
+    font-weight: 300;
   }
 </style>
 
@@ -31,6 +46,12 @@
       Point,
     },
 
+    data() {
+      return {
+        isEmpty: true
+      };
+    },
+
     oncreate() {
       //const threedeediv = this.refs.threedeediv
 
@@ -41,12 +62,26 @@
     methods: {
 
       addPoint(pointId) {
-        return new Point({
+        this.set({isEmpty: false})
+
+
+
+        let pointComponent = new Point({
           target: this.refs.container,
           data: {
             pointId: pointId
           }
         })
+
+        // update the placeholder
+        let that = this
+        pointComponent.on('deleted', function(data){
+          that.set({
+            isEmpty: that.refs.container.childElementCount === 1
+          })
+        })
+
+        return pointComponent
       },
 
     }

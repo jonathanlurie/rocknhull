@@ -1657,7 +1657,8 @@ class ThreeContext extends EventManager {
     // init camera
     this._camera = new PerspectiveCamera(27, divObj.clientWidth / divObj.clientHeight, 1, 10000);
     this._camera.position.z = 500;
-
+    this._camera.position.y = 150; 
+    this._camera.position.x = 200;
 
     // init scene
     this._scene = new Scene();
@@ -1666,7 +1667,7 @@ class ThreeContext extends EventManager {
     // fog
     let fogColor = new Color(0xffffff);
     this._scene.background = fogColor;
-    this._scene.fog = new Fog(fogColor, 1000, 1500);
+    this._scene.fog = new Fog(fogColor, 1500, 2000);
 
     let axesHelper = new AxesHelper( 100 );
     // just so that it remain visible on top of the grid:
@@ -1674,7 +1675,7 @@ class ThreeContext extends EventManager {
     this._scene.add( axesHelper );
 
     this._gridContainer = new Object3D();
-    let gridHelper = new GridHelper( 2000, 200 );
+    let gridHelper = new GridHelper( 4000, 400 );
     this._gridContainer.add(gridHelper);
     this._scene.add(this._gridContainer);
 

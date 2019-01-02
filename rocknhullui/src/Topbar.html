@@ -1,5 +1,12 @@
 <div class="container">
   <div class="toolbar">
+    
+    <div class="logo">
+      <a href="https://github.com/jonathanlurie/rocknhull" target="_blank">
+        <img  src="images/logo_white.png"/>
+      </a>
+    </div>
+
     <div class="bt" on:click="fire('addPoint')">
       Add point
     </div>
@@ -19,7 +26,7 @@
     width: 100vw;
     height: 50px;
     top: 0;
-    background-color: #AFA;
+    background-color: #339ba0;
   }
 
   .toolbar {
@@ -30,14 +37,27 @@
   .bt {
     width: 150px;
     height: 35px;
-    background: #1bca1b;
-    font-size: 20px;
+    background: #1e777b;
+    font-size: 17px;
     color: #FFF;
     line-height: 35px;
     text-align: center;
     cursor: pointer;
     margin: 0 5px 0 5px;
     user-select: none;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .logo {
+    height: 100%;
+    width: fit-content;
+    margin-right: 20px;
+  }
+
+  .logo img {
+    height: 100%;
+    width: auto;
   }
 </style>
 

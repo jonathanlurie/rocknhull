@@ -7,7 +7,6 @@
 
 
 <div class="container">
-  {pointId}
   <div class="setting-title">Position</div>
   <div class="row-of-3">
     <input type="number" step="0.1" bind:value=x>
@@ -40,16 +39,20 @@
   }
 
   .container {
-    width: 100%;
-    border-bottom: dashed 3px rgba(0, 0, 0, 0.5);
-    padding: 10px 0 10px 0;
+    /*width: 100%;*/
+    margin-bottom: 15px;
+    margin-top: 15px;
+    background: #2c9ba1;
+    padding: 10px;
   }
 
   .setting-title {
+    text-align: center;
     width: 100%;
     /*border-top: dashed 1px rgba(0, 0, 0, 0.1);*/
     font-size: 16px;
-    padding-top: 10px;
+    padding: 10px 0 5px 0;
+    color: #FFF;
   }
 
   .row-of-3 {
@@ -66,8 +69,8 @@
 
   .row-of-7 {
     display: grid;
-    grid-template-columns: 13% 13% 13% 13% 13% 13% 13%;
-    grid-gap: 1.5%;
+    grid-template-columns: 12% 12% 12% 12% 12% 12% 12%;
+    grid-gap: 2.5%;
   }
 
   .labeled-checkbox {
