@@ -6,7 +6,7 @@
 -->
 
 
-<div class="container">
+<div ref:container class="container">
   <div class="setting-title">Position</div>
   <div class="row-of-3">
     <input type="number" step="0.1" bind:value=x>
@@ -25,8 +25,21 @@
     <div class="labeled-checkbox">øo <input type="checkbox" bind:checked=RadialMirrorO></div>
   </div>
 
-  <div ref:deleteBt on:click="destroy()">
-    Delete
+  <div class="row-of-2">
+    {#if enabled}
+    <div ref:disableBt class="rectBt" on:click="disable()">
+      Disable
+    </div>
+    {:else}
+    <div ref:enableBt class="rectBt" on:click="enable()">
+      Enable
+    </div>
+    {/if}
+
+
+    <div ref:deleteBt class="rectBt" on:click="destroy()">
+      Delete
+    </div>
   </div>
 </div>
 
@@ -55,6 +68,12 @@
     color: #FFF;
   }
 
+  .row-of-2 {
+    display: grid;
+    grid-template-columns: 47.5% 47.5%;
+    grid-gap: 5%;
+  }
+
   .row-of-3 {
     display: grid;
     grid-template-columns: 30% 30% 30%;
@@ -75,12 +94,12 @@
 
   .labeled-checkbox {
     text-align: center;
+    color: #FFF;
   }
 
-  ref:deleteBt{
+  .rectBt{
     width: 100%;
     height: 35px;
-    background: #ca1b1b;
     font-size: 20px;
     color: #FFF;
     line-height: 35px;
@@ -88,10 +107,38 @@
     cursor: pointer;
   }
 
+  ref:deleteBt{
+    background: #ca1b1b;
+  }
+
+  ref:disableBt{
+    background: #ea8d00;
+  }
+
+  ref:enableBt{
+    background: #05d227;
+  }
+
+
 </style>
 
 
 <script>
+
+  function stringToColour(str) {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    }
+
+    let colour = '#'
+    for (let i = 0; i < 3; i++) {
+      let value = (hash >> (i * 8)) & 0xFF
+      colour += ('00' + value.toString(16)).substr(-2)
+    }
+    return colour
+  }
+
 
   export default {
     data() {
@@ -109,6 +156,8 @@
         RadialMirrorY: false,
         RadialMirrorZ: false,
         RadialMirrorO: false,
+
+        enabled: true
 
       }
     },
@@ -141,8 +190,24 @@
 
     oncreate() {
 
-      //const threedeediv = this.refs.threedeediv
+      const container = this.refs.container
+      container.style.borderRight = stringToColour(this.get().pointId.toString()) + ' 10px solid'
+    },
 
+    methods: {
+      disable: function() {
+        const container = this.refs.container
+        container.classList.add('grey-background')
+
+        this.set({ enabled: false })
+      },
+
+      enable: function() {
+        const container = this.refs.container
+        container.classList.remove('grey-background')
+
+        this.set({ enabled: true })
+      }
     },
 
     ondestroy() {

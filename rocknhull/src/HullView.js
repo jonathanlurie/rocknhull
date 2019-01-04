@@ -23,14 +23,29 @@ export default class HullView {
     this._container.add(this._convexHullContainer)
 
     this._cachedAnchorPoints = []
-    let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
-    let anchorPointsGeometry = new THREE.SphereBufferGeometry(1, 32, 32)
-    this._anchorPointsMesh = new THREE.Mesh(anchorPointsGeometry, anchorPointsMaterial)
+    //let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+    this._anchorPointsGeometry = new THREE.SphereBufferGeometry(1, 32, 32)
+    //this._anchorPointsMesh = new THREE.Mesh(this._anchorPointsGeometry, anchorPointsMaterial)
     this._convexHullMaterial = new THREE.MeshPhongMaterial({ color: 0x6fe2db })
 
     this._on = {
       renderNeeded: function () {}
     }
+  }
+
+
+  static stringToColour(str) {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    }
+
+    let colour = '#'
+    for (let i = 0; i < 3; i++) {
+      let value = (hash >> (i * 8)) & 0xFF
+      colour += ('00' + value.toString(16)).substr(-2)
+    }
+    return colour
   }
 
 
@@ -94,8 +109,10 @@ export default class HullView {
     let apList = this._cachedAnchorPoints
 
     for (let i=0; i<apList.length; i++) {
-      let apMesh = this._anchorPointsMesh.clone()
-      apMesh.position.copy(apList[i])
+      let color = HullView.stringToColour(apList[i].id.toString())
+      let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: color, fog: false })
+      let apMesh = new THREE.Mesh(this._anchorPointsGeometry, anchorPointsMaterial)
+      apMesh.position.copy(apList[i].position)
       this._anchorPointsContainer.add(apMesh)
     }
 
@@ -119,7 +136,7 @@ export default class HullView {
 
     this._flushConvexHullContainer()
 
-    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints)
+    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints.map(x => x.position))
     const convexMesh = new THREE.Mesh(convexGeometry, this._convexHullMaterial)
     this._convexHullContainer.add(convexMesh)
     this._on.renderNeeded()

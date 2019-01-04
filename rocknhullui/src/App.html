@@ -1,5 +1,5 @@
 <div ref:threedeediv></div>
-<Topbar on:addPoint="addPoint()" on:buildhull="buildhull()"/>
+<Topbar on:addPoint="addPoint()" on:buildhull="buildhull()" on:deleteAllPoint="deleteAllPoint()"/>
 <Sidebar ref:sidebar/>
 
 <style>
@@ -52,7 +52,6 @@
         // adding the point in the internal logic of rocknhull
         let pointInfo = apc.add([0, 0, 0])
         let anchorPoint = pointInfo.anchorPoint
-        // console.log(pointInfo)
 
         // adding the UI for this point
         const sidebar = this.refs.sidebar
@@ -70,7 +69,10 @@
             anchorPoint.setY(changedState.y)
           }else if ('z' in changedState) {
             anchorPoint.setZ(changedState.z)
-          }else {
+          }else if ('enabled' in changedState){
+            anchorPoint.enable(changedState.enabled)
+          } else {
+            // this is about symmetry
             let k = Object.keys(changedState)[0]
             anchorPoint['enable' + k](changedState[k])
           }
@@ -93,7 +95,22 @@
         let rock = this.get().rock
         let hv = rock.getHullView()
         hv.buildConvexHull()
-      }
+      },
+
+
+      deleteAllPoint() {
+        const sidebar = this.refs.sidebar
+        sidebar.deleteAll()
+
+        let rock = this.get().rock
+        let apc = rock.getAnchorPointCollection()
+        let hv = rock.getHullView()
+
+        apc.deleteAllAnchorPoints()
+        hv.updateAnchorPoints()
+        hv.deleteConvexHull()
+      },
+
     }
   }
 </script>

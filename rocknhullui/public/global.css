@@ -63,3 +63,7 @@ button:active {
 button:focus {
   border-color: #666;
 }
+
+.grey-background {
+  background: #999 !important;
+}

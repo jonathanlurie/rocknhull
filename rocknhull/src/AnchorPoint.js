@@ -12,9 +12,12 @@ export default class AnchorPoint {
   /**
    * @param {Array} pos - position as [x, y, z]
    */
-  constructor(pos){
+  constructor(pos, id){
+    console.log('AnchorPoint ' + id)
     this._position = pos
+    this._id = id
     this._mirror = [false, false, false, false, false, false, false]
+    this._enabled = true
   }
 
 
@@ -99,7 +102,8 @@ export default class AnchorPoint {
   }
 
 
-  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+  /**
+   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
    * addition to the regular one, using the X axis as rotation axis.
    * @param  {Boolean} en - true to symetry, false to not symetry
    * @return {AnchorPoint} return `this` to enable chaining
@@ -109,7 +113,8 @@ export default class AnchorPoint {
     return this
   }
 
-  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+  /**
+   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
    * addition to the regular one, using the X axis as rotation axis.
    * @param  {Boolean} en - true to symetry, false to not symetry
    * @return {AnchorPoint} return `this` to enable chaining
@@ -120,7 +125,8 @@ export default class AnchorPoint {
   }
 
 
-  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+  /**
+   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
    * addition to the regular one, using the X axis as rotation axis.
    * @param  {Boolean} en - true to symetry, false to not symetry
    * @return {AnchorPoint} return `this` to enable chaining
@@ -131,7 +137,8 @@ export default class AnchorPoint {
   }
 
 
-  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+  /**
+   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
    * addition to the regular one, using the origin as rotation point.
    * @param  {Boolean} en - true to symetry, false to not symetry
    * @return {AnchorPoint} return `this` to enable chaining
@@ -143,38 +150,77 @@ export default class AnchorPoint {
 
 
   /**
+   * Flag this point as enabled or disabled
+   * @param  {Boolean} b - true to flag it as enabled, false to flag it as disabled
+   * @return {AnchorPoint} return `this` to enable chaining
+   */
+  enable(b) {
+    this._enabled = b
+    return this
+  }
+
+
+  isEnabled() {
+    return this._enabled
+  }
+
+  /**
    * Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
    * @return {[THREE.Vector3]} An array of THREE.Vector3 built on te fly
    */
   getAnchorPoints() {
-    let points = [new THREE.Vector3(...this._position)]
+    let points = [{
+      id: this._id,
+      position: new THREE.Vector3(...this._position),
+    }]
 
     if (this._mirror[0]) {
-      points.push(new THREE.Vector3(-this._position[0], this._position[1], this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(-this._position[0], this._position[1], this._position[2])
+      })
     }
 
     if (this._mirror[1]) {
-      points.push(new THREE.Vector3(this._position[0], -this._position[1], this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(this._position[0], -this._position[1], this._position[2])
+      })
     }
 
     if (this._mirror[2]) {
-      points.push(new THREE.Vector3(this._position[0], this._position[1], -this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(this._position[0], this._position[1], -this._position[2])
+      })
     }
 
     if (this._mirror[3]) {
-      points.push(new THREE.Vector3(this._position[0], -this._position[1], -this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(this._position[0], -this._position[1], -this._position[2])
+      })
     }
 
     if (this._mirror[4]) {
-      points.push(new THREE.Vector3(-this._position[0], this._position[1], -this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(-this._position[0], this._position[1], -this._position[2])
+      })
     }
 
     if (this._mirror[5]) {
-      points.push(new THREE.Vector3(-this._position[0], -this._position[1], this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(-this._position[0], -this._position[1], this._position[2])
+      })
     }
 
     if (this._mirror[6]) {
-      points.push(new THREE.Vector3(-this._position[0], -this._position[1], -this._position[2]))
+      points.push({
+        id: this._id,
+        position: new THREE.Vector3(-this._position[0], -this._position[1], -this._position[2])
+      })
     }
 
     return points

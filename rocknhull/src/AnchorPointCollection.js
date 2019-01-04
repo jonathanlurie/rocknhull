@@ -20,7 +20,10 @@ export default class AnchorPointCollection {
     // we generate a random ID for this AnchorPoint
     let id = Math.random().toFixed(10).split('.')[1]
 
-    this._collection[id] = new AnchorPoint(pos)
+    // this way, the id could also be used as a color
+    //let id = ~~(Math.random() * 256**3)
+
+    this._collection[id] = new AnchorPoint(pos, id)
     return {
       id: id,
       anchorPoint: this._collection[id]
@@ -67,7 +70,10 @@ export default class AnchorPointCollection {
     let all = []
     let ids = Object.keys(this._collection)
     for (let i=0; i<ids.length; i++) {
-      all = all.concat(this._collection[ids[i]].getAnchorPoints())
+      let ap = this._collection[ids[i]]
+      if (ap.isEnabled()) {
+        all = all.concat(ap.getAnchorPoints())
+      }
     }
     return all
   }

@@ -64,8 +64,6 @@
       addPoint(pointId) {
         this.set({isEmpty: false})
 
-
-
         let pointComponent = new Point({
           target: this.refs.container,
           data: {
@@ -83,6 +81,20 @@
 
         return pointComponent
       },
+
+
+      deleteAll() {
+        if (this.get().isEmpty) {
+          return
+        }
+
+        let myNode = this.refs.container
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild)
+        }
+
+        this.set({isEmpty: true})
+      }
 
     }
   }

@@ -48149,9 +48149,12 @@
 	  /**
 	   * @param {Array} pos - position as [x, y, z]
 	   */
-	  constructor(pos){
+	  constructor(pos, id){
+	    console.log('AnchorPoint ' + id);
 	    this._position = pos;
+	    this._id = id;
 	    this._mirror = [false, false, false, false, false, false, false];
+	    this._enabled = true;
 	  }
 
 
@@ -48236,7 +48239,8 @@
 	  }
 
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the X axis as rotation axis.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48246,7 +48250,8 @@
 	    return this
 	  }
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the X axis as rotation axis.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48257,7 +48262,8 @@
 	  }
 
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the X axis as rotation axis.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48268,7 +48274,8 @@
 	  }
 
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the origin as rotation point.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48280,38 +48287,77 @@
 
 
 	  /**
+	   * Flag this point as enabled or disabled
+	   * @param  {Boolean} b - true to flag it as enabled, false to flag it as disabled
+	   * @return {AnchorPoint} return `this` to enable chaining
+	   */
+	  enable(b) {
+	    this._enabled = b;
+	    return this
+	  }
+
+
+	  isEnabled() {
+	    return this._enabled
+	  }
+
+	  /**
 	   * Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
 	   * @return {[THREE.Vector3]} An array of THREE.Vector3 built on te fly
 	   */
 	  getAnchorPoints() {
-	    let points = [new Vector3(...this._position)];
+	    let points = [{
+	      id: this._id,
+	      position: new Vector3(...this._position),
+	    }];
 
 	    if (this._mirror[0]) {
-	      points.push(new Vector3(-this._position[0], this._position[1], this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], this._position[1], this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[1]) {
-	      points.push(new Vector3(this._position[0], -this._position[1], this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(this._position[0], -this._position[1], this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[2]) {
-	      points.push(new Vector3(this._position[0], this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(this._position[0], this._position[1], -this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[3]) {
-	      points.push(new Vector3(this._position[0], -this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(this._position[0], -this._position[1], -this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[4]) {
-	      points.push(new Vector3(-this._position[0], this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], this._position[1], -this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[5]) {
-	      points.push(new Vector3(-this._position[0], -this._position[1], this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], -this._position[1], this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[6]) {
-	      points.push(new Vector3(-this._position[0], -this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], -this._position[1], -this._position[2])
+	      });
 	    }
 
 	    return points
@@ -48340,7 +48386,10 @@
 	    // we generate a random ID for this AnchorPoint
 	    let id = Math.random().toFixed(10).split('.')[1];
 
-	    this._collection[id] = new AnchorPoint(pos);
+	    // this way, the id could also be used as a color
+	    //let id = ~~(Math.random() * 256**3)
+
+	    this._collection[id] = new AnchorPoint(pos, id);
 	    return {
 	      id: id,
 	      anchorPoint: this._collection[id]
@@ -48387,7 +48436,10 @@
 	    let all = [];
 	    let ids = Object.keys(this._collection);
 	    for (let i=0; i<ids.length; i++) {
-	      all = all.concat(this._collection[ids[i]].getAnchorPoints());
+	      let ap = this._collection[ids[i]];
+	      if (ap.isEnabled()) {
+	        all = all.concat(ap.getAnchorPoints());
+	      }
 	    }
 	    return all
 	  }
@@ -49436,14 +49488,29 @@
 	    this._container.add(this._convexHullContainer);
 
 	    this._cachedAnchorPoints = [];
-	    let anchorPointsMaterial = new MeshBasicMaterial({ color: 0xff00ff });
-	    let anchorPointsGeometry = new SphereBufferGeometry(1, 32, 32);
-	    this._anchorPointsMesh = new Mesh(anchorPointsGeometry, anchorPointsMaterial);
+	    //let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+	    this._anchorPointsGeometry = new SphereBufferGeometry(1, 32, 32);
+	    //this._anchorPointsMesh = new THREE.Mesh(this._anchorPointsGeometry, anchorPointsMaterial)
 	    this._convexHullMaterial = new MeshPhongMaterial({ color: 0x6fe2db });
 
 	    this._on = {
 	      renderNeeded: function () {}
 	    };
+	  }
+
+
+	  static stringToColour(str) {
+	    let hash = 0;
+	    for (let i = 0; i < str.length; i++) {
+	      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+	    }
+
+	    let colour = '#';
+	    for (let i = 0; i < 3; i++) {
+	      let value = (hash >> (i * 8)) & 0xFF;
+	      colour += ('00' + value.toString(16)).substr(-2);
+	    }
+	    return colour
 	  }
 
 
@@ -49507,8 +49574,10 @@
 	    let apList = this._cachedAnchorPoints;
 
 	    for (let i=0; i<apList.length; i++) {
-	      let apMesh = this._anchorPointsMesh.clone();
-	      apMesh.position.copy(apList[i]);
+	      let color = HullView.stringToColour(apList[i].id.toString());
+	      let anchorPointsMaterial = new MeshBasicMaterial({ color: color, fog: false });
+	      let apMesh = new Mesh(this._anchorPointsGeometry, anchorPointsMaterial);
+	      apMesh.position.copy(apList[i].position);
 	      this._anchorPointsContainer.add(apMesh);
 	    }
 
@@ -49532,7 +49601,7 @@
 
 	    this._flushConvexHullContainer();
 
-	    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints);
+	    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints.map(x => x.position));
 	    const convexMesh = new Mesh(convexGeometry, this._convexHullMaterial);
 	    this._convexHullContainer.add(convexMesh);
 	    this._on.renderNeeded();

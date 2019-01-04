@@ -1,6 +1,6 @@
 <div class="container">
   <div class="toolbar">
-    
+
     <div class="logo">
       <a href="https://github.com/jonathanlurie/rocknhull" target="_blank">
         <img  src="images/logo_white.png"/>
@@ -14,6 +14,11 @@
     <div class="bt" on:click="fire('buildhull')">
       Build hull
     </div>
+
+    <div class="bt warning" on:click="fire('deleteAllPoint')">
+      Delete all
+    </div>
+
   </div>
 
 </div>
@@ -58,6 +63,10 @@
   .logo img {
     height: 100%;
     width: auto;
+  }
+
+  .warning {
+    background: #ca1b1b;
   }
 </style>
 

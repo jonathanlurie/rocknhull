@@ -48356,9 +48356,12 @@ var app = (function () {
 	  /**
 	   * @param {Array} pos - position as [x, y, z]
 	   */
-	  constructor(pos){
+	  constructor(pos, id){
+	    console.log('AnchorPoint ' + id);
 	    this._position = pos;
+	    this._id = id;
 	    this._mirror = [false, false, false, false, false, false, false];
+	    this._enabled = true;
 	  }
 
 
@@ -48443,7 +48446,8 @@ var app = (function () {
 	  }
 
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the X axis as rotation axis.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48453,7 +48457,8 @@ var app = (function () {
 	    return this
 	  }
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the X axis as rotation axis.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48464,7 +48469,8 @@ var app = (function () {
 	  }
 
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the X axis as rotation axis.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48475,7 +48481,8 @@ var app = (function () {
 	  }
 
 
-	  /* If true, the method `getAnchorPoints()` will return the radial symmetrical point in
+	  /**
+	   * If true, the method `getAnchorPoints()` will return the radial symmetrical point in
 	   * addition to the regular one, using the origin as rotation point.
 	   * @param  {Boolean} en - true to symetry, false to not symetry
 	   * @return {AnchorPoint} return `this` to enable chaining
@@ -48487,38 +48494,77 @@ var app = (function () {
 
 
 	  /**
+	   * Flag this point as enabled or disabled
+	   * @param  {Boolean} b - true to flag it as enabled, false to flag it as disabled
+	   * @return {AnchorPoint} return `this` to enable chaining
+	   */
+	  enable(b) {
+	    this._enabled = b;
+	    return this
+	  }
+
+
+	  isEnabled() {
+	    return this._enabled
+	  }
+
+	  /**
 	   * Get all the AnchorPoint, aka. the original one and all its mirror (if enabled)
 	   * @return {[THREE.Vector3]} An array of THREE.Vector3 built on te fly
 	   */
 	  getAnchorPoints() {
-	    let points = [new Vector3(...this._position)];
+	    let points = [{
+	      id: this._id,
+	      position: new Vector3(...this._position),
+	    }];
 
 	    if (this._mirror[0]) {
-	      points.push(new Vector3(-this._position[0], this._position[1], this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], this._position[1], this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[1]) {
-	      points.push(new Vector3(this._position[0], -this._position[1], this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(this._position[0], -this._position[1], this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[2]) {
-	      points.push(new Vector3(this._position[0], this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(this._position[0], this._position[1], -this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[3]) {
-	      points.push(new Vector3(this._position[0], -this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(this._position[0], -this._position[1], -this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[4]) {
-	      points.push(new Vector3(-this._position[0], this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], this._position[1], -this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[5]) {
-	      points.push(new Vector3(-this._position[0], -this._position[1], this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], -this._position[1], this._position[2])
+	      });
 	    }
 
 	    if (this._mirror[6]) {
-	      points.push(new Vector3(-this._position[0], -this._position[1], -this._position[2]));
+	      points.push({
+	        id: this._id,
+	        position: new Vector3(-this._position[0], -this._position[1], -this._position[2])
+	      });
 	    }
 
 	    return points
@@ -48547,7 +48593,10 @@ var app = (function () {
 	    // we generate a random ID for this AnchorPoint
 	    let id = Math.random().toFixed(10).split('.')[1];
 
-	    this._collection[id] = new AnchorPoint(pos);
+	    // this way, the id could also be used as a color
+	    //let id = ~~(Math.random() * 256**3)
+
+	    this._collection[id] = new AnchorPoint(pos, id);
 	    return {
 	      id: id,
 	      anchorPoint: this._collection[id]
@@ -48594,7 +48643,10 @@ var app = (function () {
 	    let all = [];
 	    let ids = Object.keys(this._collection);
 	    for (let i=0; i<ids.length; i++) {
-	      all = all.concat(this._collection[ids[i]].getAnchorPoints());
+	      let ap = this._collection[ids[i]];
+	      if (ap.isEnabled()) {
+	        all = all.concat(ap.getAnchorPoints());
+	      }
 	    }
 	    return all
 	  }
@@ -49643,14 +49695,29 @@ var app = (function () {
 	    this._container.add(this._convexHullContainer);
 
 	    this._cachedAnchorPoints = [];
-	    let anchorPointsMaterial = new MeshBasicMaterial({ color: 0xff00ff });
-	    let anchorPointsGeometry = new SphereBufferGeometry(1, 32, 32);
-	    this._anchorPointsMesh = new Mesh(anchorPointsGeometry, anchorPointsMaterial);
+	    //let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+	    this._anchorPointsGeometry = new SphereBufferGeometry(1, 32, 32);
+	    //this._anchorPointsMesh = new THREE.Mesh(this._anchorPointsGeometry, anchorPointsMaterial)
 	    this._convexHullMaterial = new MeshPhongMaterial({ color: 0x6fe2db });
 
 	    this._on = {
 	      renderNeeded: function () {}
 	    };
+	  }
+
+
+	  static stringToColour(str) {
+	    let hash = 0;
+	    for (let i = 0; i < str.length; i++) {
+	      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+	    }
+
+	    let colour = '#';
+	    for (let i = 0; i < 3; i++) {
+	      let value = (hash >> (i * 8)) & 0xFF;
+	      colour += ('00' + value.toString(16)).substr(-2);
+	    }
+	    return colour
 	  }
 
 
@@ -49714,8 +49781,10 @@ var app = (function () {
 	    let apList = this._cachedAnchorPoints;
 
 	    for (let i=0; i<apList.length; i++) {
-	      let apMesh = this._anchorPointsMesh.clone();
-	      apMesh.position.copy(apList[i]);
+	      let color = HullView.stringToColour(apList[i].id.toString());
+	      let anchorPointsMaterial = new MeshBasicMaterial({ color: color, fog: false });
+	      let apMesh = new Mesh(this._anchorPointsGeometry, anchorPointsMaterial);
+	      apMesh.position.copy(apList[i].position);
 	      this._anchorPointsContainer.add(apMesh);
 	    }
 
@@ -49739,7 +49808,7 @@ var app = (function () {
 
 	    this._flushConvexHullContainer();
 
-	    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints);
+	    const convexGeometry = new ConvexBufferGeometry(this._cachedAnchorPoints.map(x => x.position));
 	    const convexMesh = new Mesh(convexGeometry, this._convexHullMaterial);
 	    this._convexHullContainer.add(convexMesh);
 	    this._on.renderNeeded();
@@ -49826,6 +49895,21 @@ var app = (function () {
 
 	/* src/Point.html generated by Svelte v2.16.0 */
 
+	function stringToColour(str) {
+	  let hash$$1 = 0;
+	  for (let i = 0; i < str.length; i++) {
+	    hash$$1 = str.charCodeAt(i) + ((hash$$1 << 5) - hash$$1);
+	  }
+
+	  let colour = '#';
+	  for (let i = 0; i < 3; i++) {
+	    let value = (hash$$1 >> (i * 8)) & 0xFF;
+	    colour += ('00' + value.toString(16)).substr(-2);
+	  }
+	  return colour
+	}
+
+
 	function data() {
 	  return {
 	    x: 0,
@@ -49842,12 +49926,30 @@ var app = (function () {
 	    RadialMirrorZ: false,
 	    RadialMirrorO: false,
 
+	    enabled: true
+
 	  }
 	}
+	var methods = {
+	  disable: function() {
+	    const container = this.refs.container;
+	    container.classList.add('grey-background');
+
+	    this.set({ enabled: false });
+	  },
+
+	  enable: function() {
+	    const container = this.refs.container;
+	    container.classList.remove('grey-background');
+
+	    this.set({ enabled: true });
+	  }
+	};
+
 	function oncreate() {
 
-	  //const threedeediv = this.refs.threedeediv
-
+	  const container = this.refs.container;
+	  container.style.borderRight = stringToColour(this.get().pointId.toString()) + ' 10px solid';
 	}
 	function ondestroy() {
 	  // TODO: throw an event to remove the 3D point"
@@ -49881,7 +49983,7 @@ var app = (function () {
 	const file = "src/Point.html";
 
 	function create_main_fragment(component, ctx) {
-		var div12, div0, text1, div1, input0, input0_updating = false, text2, input1, input1_updating = false, text3, input2, input2_updating = false, text4, div2, text6, div10, div3, text7, input3, text8, div4, text9, input4, text10, div5, text11, input5, text12, div6, text13, input6, text14, div7, text15, input7, text16, div8, text17, input8, text18, div9, text19, input9, text20, div11, current;
+		var div13, div0, text1, div1, input0, input0_updating = false, text2, input1, input1_updating = false, text3, input2, input2_updating = false, text4, div2, text6, div10, div3, text7, input3, text8, div4, text9, input4, text10, div5, text11, input5, text12, div6, text13, input6, text14, div7, text15, input7, text16, div8, text17, input8, text18, div9, text19, input9, text20, div12, text21, div11, current;
 
 		function input0_input_handler() {
 			input0_updating = true;
@@ -49929,13 +50031,21 @@ var app = (function () {
 			component.set({ RadialMirrorO: input9.checked });
 		}
 
+		function select_block_type(ctx) {
+			if (ctx.enabled) return create_if_block;
+			return create_else_block;
+		}
+
+		var current_block_type = select_block_type(ctx);
+		var if_block = current_block_type(component, ctx);
+
 		function click_handler(event) {
 			component.destroy();
 		}
 
 		return {
 			c: function create() {
-				div12 = createElement("div");
+				div13 = createElement("div");
 				div0 = createElement("div");
 				div0.textContent = "Position";
 				text1 = createText("\n  ");
@@ -49978,85 +50088,90 @@ var app = (function () {
 				text19 = createText("øo ");
 				input9 = createElement("input");
 				text20 = createText("\n\n  ");
+				div12 = createElement("div");
+				if_block.c();
+				text21 = createText("\n\n\n    ");
 				div11 = createElement("div");
 				div11.textContent = "Delete";
-				div0.className = "setting-title svelte-1x55fk7";
-				addLoc(div0, file, 9, 2, 163);
+				div0.className = "setting-title svelte-19613i1";
+				addLoc(div0, file, 9, 2, 177);
 				addListener(input0, "input", input0_input_handler);
 				setAttribute(input0, "type", "number");
 				input0.step = "0.1";
-				input0.className = "svelte-1x55fk7";
-				addLoc(input0, file, 11, 4, 234);
+				input0.className = "svelte-19613i1";
+				addLoc(input0, file, 11, 4, 248);
 				addListener(input1, "input", input1_input_handler);
 				setAttribute(input1, "type", "number");
 				input1.step = "0.1";
-				input1.className = "svelte-1x55fk7";
-				addLoc(input1, file, 12, 4, 284);
+				input1.className = "svelte-19613i1";
+				addLoc(input1, file, 12, 4, 298);
 				addListener(input2, "input", input2_input_handler);
 				setAttribute(input2, "type", "number");
 				input2.step = "0.1";
-				input2.className = "svelte-1x55fk7";
-				addLoc(input2, file, 13, 4, 334);
-				div1.className = "row-of-3 svelte-1x55fk7";
-				addLoc(div1, file, 10, 2, 207);
-				div2.className = "setting-title svelte-1x55fk7";
-				addLoc(div2, file, 16, 2, 392);
+				input2.className = "svelte-19613i1";
+				addLoc(input2, file, 13, 4, 348);
+				div1.className = "row-of-3 svelte-19613i1";
+				addLoc(div1, file, 10, 2, 221);
+				div2.className = "setting-title svelte-19613i1";
+				addLoc(div2, file, 16, 2, 406);
 				addListener(input3, "change", input3_change_handler);
 				setAttribute(input3, "type", "checkbox");
-				input3.className = "svelte-1x55fk7";
-				addLoc(input3, file, 18, 37, 496);
-				div3.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div3, file, 18, 4, 463);
+				input3.className = "svelte-19613i1";
+				addLoc(input3, file, 18, 37, 510);
+				div3.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div3, file, 18, 4, 477);
 				addListener(input4, "change", input4_change_handler);
 				setAttribute(input4, "type", "checkbox");
-				input4.className = "svelte-1x55fk7";
-				addLoc(input4, file, 19, 37, 584);
-				div4.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div4, file, 19, 4, 551);
+				input4.className = "svelte-19613i1";
+				addLoc(input4, file, 19, 37, 598);
+				div4.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div4, file, 19, 4, 565);
 				addListener(input5, "change", input5_change_handler);
 				setAttribute(input5, "type", "checkbox");
-				input5.className = "svelte-1x55fk7";
-				addLoc(input5, file, 20, 37, 672);
-				div5.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div5, file, 20, 4, 639);
+				input5.className = "svelte-19613i1";
+				addLoc(input5, file, 20, 37, 686);
+				div5.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div5, file, 20, 4, 653);
 				addListener(input6, "change", input6_change_handler);
 				setAttribute(input6, "type", "checkbox");
-				input6.className = "svelte-1x55fk7";
-				addLoc(input6, file, 21, 37, 760);
-				div6.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div6, file, 21, 4, 727);
+				input6.className = "svelte-19613i1";
+				addLoc(input6, file, 21, 37, 774);
+				div6.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div6, file, 21, 4, 741);
 				addListener(input7, "change", input7_change_handler);
 				setAttribute(input7, "type", "checkbox");
-				input7.className = "svelte-1x55fk7";
-				addLoc(input7, file, 22, 37, 854);
-				div7.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div7, file, 22, 4, 821);
+				input7.className = "svelte-19613i1";
+				addLoc(input7, file, 22, 37, 868);
+				div7.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div7, file, 22, 4, 835);
 				addListener(input8, "change", input8_change_handler);
 				setAttribute(input8, "type", "checkbox");
-				input8.className = "svelte-1x55fk7";
-				addLoc(input8, file, 23, 37, 948);
-				div8.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div8, file, 23, 4, 915);
+				input8.className = "svelte-19613i1";
+				addLoc(input8, file, 23, 37, 962);
+				div8.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div8, file, 23, 4, 929);
 				addListener(input9, "change", input9_change_handler);
 				setAttribute(input9, "type", "checkbox");
-				input9.className = "svelte-1x55fk7";
-				addLoc(input9, file, 24, 37, 1042);
-				div9.className = "labeled-checkbox svelte-1x55fk7";
-				addLoc(div9, file, 24, 4, 1009);
-				div10.className = "row-of-7 svelte-1x55fk7";
-				addLoc(div10, file, 17, 2, 436);
+				input9.className = "svelte-19613i1";
+				addLoc(input9, file, 24, 37, 1056);
+				div9.className = "labeled-checkbox svelte-19613i1";
+				addLoc(div9, file, 24, 4, 1023);
+				div10.className = "row-of-7 svelte-19613i1";
+				addLoc(div10, file, 17, 2, 450);
 				addListener(div11, "click", click_handler);
-				div11.className = "svelte-1x55fk7 svelte-ref-deleteBt";
-				addLoc(div11, file, 27, 2, 1111);
-				div12.className = "container svelte-1x55fk7";
-				addLoc(div12, file, 8, 0, 137);
+				div11.className = "rectBt svelte-19613i1 svelte-ref-deleteBt";
+				addLoc(div11, file, 39, 4, 1361);
+				div12.className = "row-of-2 svelte-19613i1";
+				addLoc(div12, file, 27, 2, 1125);
+				div13.className = "container svelte-19613i1";
+				addLoc(div13, file, 8, 0, 137);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, div12, anchor);
-				append(div12, div0);
-				append(div12, text1);
-				append(div12, div1);
+				insert(target, div13, anchor);
+				append(div13, div0);
+				append(div13, text1);
+				append(div13, div1);
 				append(div1, input0);
 
 				input0.value = ctx.x;
@@ -50071,10 +50186,10 @@ var app = (function () {
 
 				input2.value = ctx.z;
 
-				append(div12, text4);
-				append(div12, div2);
-				append(div12, text6);
-				append(div12, div10);
+				append(div13, text4);
+				append(div13, div2);
+				append(div13, text6);
+				append(div13, div10);
 				append(div10, div3);
 				append(div3, text7);
 				append(div3, input3);
@@ -50123,9 +50238,13 @@ var app = (function () {
 
 				input9.checked = ctx.RadialMirrorO;
 
-				append(div12, text20);
+				append(div13, text20);
+				append(div13, div12);
+				if_block.m(div12, null);
+				append(div12, text21);
 				append(div12, div11);
 				component.refs.deleteBt = div11;
+				component.refs.container = div13;
 				current = true;
 			},
 
@@ -50140,6 +50259,13 @@ var app = (function () {
 				if (changed.RadialMirrorY) input7.checked = ctx.RadialMirrorY;
 				if (changed.RadialMirrorZ) input8.checked = ctx.RadialMirrorZ;
 				if (changed.RadialMirrorO) input9.checked = ctx.RadialMirrorO;
+
+				if (current_block_type !== (current_block_type = select_block_type(ctx))) {
+					if_block.d(1);
+					if_block = current_block_type(component, ctx);
+					if_block.c();
+					if_block.m(div12, text21);
+				}
 			},
 
 			i: function intro(target, anchor) {
@@ -50152,7 +50278,7 @@ var app = (function () {
 
 			d: function destroy$$1(detach) {
 				if (detach) {
-					detachNode(div12);
+					detachNode(div13);
 				}
 
 				removeListener(input0, "input", input0_input_handler);
@@ -50165,8 +50291,76 @@ var app = (function () {
 				removeListener(input7, "change", input7_change_handler);
 				removeListener(input8, "change", input8_change_handler);
 				removeListener(input9, "change", input9_change_handler);
+				if_block.d();
 				removeListener(div11, "click", click_handler);
 				if (component.refs.deleteBt === div11) component.refs.deleteBt = null;
+				if (component.refs.container === div13) component.refs.container = null;
+			}
+		};
+	}
+
+	// (33:4) {:else}
+	function create_else_block(component, ctx) {
+		var div;
+
+		function click_handler(event) {
+			component.enable();
+		}
+
+		return {
+			c: function create() {
+				div = createElement("div");
+				div.textContent = "Enable";
+				addListener(div, "click", click_handler);
+				div.className = "rectBt svelte-19613i1 svelte-ref-enableBt";
+				addLoc(div, file, 33, 4, 1267);
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div, anchor);
+				component.refs.enableBt = div;
+			},
+
+			d: function destroy$$1(detach) {
+				if (detach) {
+					detachNode(div);
+				}
+
+				removeListener(div, "click", click_handler);
+				if (component.refs.enableBt === div) component.refs.enableBt = null;
+			}
+		};
+	}
+
+	// (29:4) {#if enabled}
+	function create_if_block(component, ctx) {
+		var div;
+
+		function click_handler(event) {
+			component.disable();
+		}
+
+		return {
+			c: function create() {
+				div = createElement("div");
+				div.textContent = "Disable";
+				addListener(div, "click", click_handler);
+				div.className = "rectBt svelte-19613i1 svelte-ref-disableBt";
+				addLoc(div, file, 29, 4, 1170);
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div, anchor);
+				component.refs.disableBt = div;
+			},
+
+			d: function destroy$$1(detach) {
+				if (detach) {
+					detachNode(div);
+				}
+
+				removeListener(div, "click", click_handler);
+				if (component.refs.disableBt === div) component.refs.disableBt = null;
 			}
 		};
 	}
@@ -50190,6 +50384,7 @@ var app = (function () {
 		if (!('RadialMirrorY' in this._state)) console.warn("<Point> was created without expected data property 'RadialMirrorY'");
 		if (!('RadialMirrorZ' in this._state)) console.warn("<Point> was created without expected data property 'RadialMirrorZ'");
 		if (!('RadialMirrorO' in this._state)) console.warn("<Point> was created without expected data property 'RadialMirrorO'");
+		if (!('enabled' in this._state)) console.warn("<Point> was created without expected data property 'enabled'");
 		this._intro = !!options.intro;
 
 		this._handlers.state = [onstate];
@@ -50217,6 +50412,7 @@ var app = (function () {
 	}
 
 	assign(Point.prototype, protoDev);
+	assign(Point.prototype, methods);
 
 	Point.prototype._checkReadOnly = function _checkReadOnly(newState) {
 	};
@@ -50228,12 +50424,10 @@ var app = (function () {
 	    isEmpty: true
 	  };
 	}
-	var methods = {
+	var methods$1 = {
 
 	  addPoint(pointId) {
 	    this.set({isEmpty: false});
-
-
 
 	    let pointComponent = new Point({
 	      target: this.refs.container,
@@ -50253,6 +50447,20 @@ var app = (function () {
 	    return pointComponent
 	  },
 
+
+	  deleteAll() {
+	    if (this.get().isEmpty) {
+	      return
+	    }
+
+	    let myNode = this.refs.container;
+	    while (myNode.firstChild) {
+	        myNode.removeChild(myNode.firstChild);
+	    }
+
+	    this.set({isEmpty: true});
+	  }
+
 	};
 
 	function oncreate$1() {
@@ -50265,7 +50473,7 @@ var app = (function () {
 	function create_main_fragment$1(component, ctx) {
 		var div, current;
 
-		var if_block = (ctx.isEmpty) && create_if_block(component, ctx);
+		var if_block = (ctx.isEmpty) && create_if_block$1(component, ctx);
 
 		return {
 			c: function create() {
@@ -50285,7 +50493,7 @@ var app = (function () {
 			p: function update(changed, ctx) {
 				if (ctx.isEmpty) {
 					if (!if_block) {
-						if_block = create_if_block(component, ctx);
+						if_block = create_if_block$1(component, ctx);
 						if_block.c();
 						if_block.m(div, null);
 					}
@@ -50315,7 +50523,7 @@ var app = (function () {
 	}
 
 	// (2:2) {#if isEmpty}
-	function create_if_block(component, ctx) {
+	function create_if_block$1(component, ctx) {
 		var div;
 
 		return {
@@ -50369,7 +50577,7 @@ var app = (function () {
 	}
 
 	assign(Sidebar.prototype, protoDev);
-	assign(Sidebar.prototype, methods);
+	assign(Sidebar.prototype, methods$1);
 
 	Sidebar.prototype._checkReadOnly = function _checkReadOnly(newState) {
 	};
@@ -50381,7 +50589,7 @@ var app = (function () {
 	    thing: "thing 0"
 	  };
 	}
-	var methods$1 = {
+	var methods$2 = {
 	  /*
 	  addPoint() {
 	    console.log('HELLO')
@@ -50397,7 +50605,7 @@ var app = (function () {
 	const file$2 = "src/Topbar.html";
 
 	function create_main_fragment$2(component, ctx) {
-		var div4, div3, div0, a, img, text0, div1, text2, div2, current;
+		var div5, div4, div0, a, img, text0, div1, text2, div2, text4, div3, current;
 
 		function click_handler(event) {
 			component.fire('addPoint');
@@ -50407,10 +50615,14 @@ var app = (function () {
 			component.fire('buildhull');
 		}
 
+		function click_handler_2(event) {
+			component.fire('deleteAllPoint');
+		}
+
 		return {
 			c: function create() {
+				div5 = createElement("div");
 				div4 = createElement("div");
-				div3 = createElement("div");
 				div0 = createElement("div");
 				a = createElement("a");
 				img = createElement("img");
@@ -50420,36 +50632,44 @@ var app = (function () {
 				text2 = createText("\n\n    ");
 				div2 = createElement("div");
 				div2.textContent = "Build hull";
+				text4 = createText("\n\n    ");
+				div3 = createElement("div");
+				div3.textContent = "Delete all";
 				img.src = "images/logo_white.png";
-				img.className = "svelte-1y5q67i";
-				addLoc(img, file$2, 5, 8, 160);
+				img.className = "svelte-6lzy8m";
+				addLoc(img, file$2, 5, 8, 156);
 				a.href = "https://github.com/jonathanlurie/rocknhull";
 				a.target = "_blank";
-				addLoc(a, file$2, 4, 6, 82);
-				div0.className = "logo svelte-1y5q67i";
-				addLoc(div0, file$2, 3, 4, 57);
+				addLoc(a, file$2, 4, 6, 78);
+				div0.className = "logo svelte-6lzy8m";
+				addLoc(div0, file$2, 3, 4, 53);
 				addListener(div1, "click", click_handler);
-				div1.className = "bt svelte-1y5q67i";
-				addLoc(div1, file$2, 9, 4, 223);
+				div1.className = "bt svelte-6lzy8m";
+				addLoc(div1, file$2, 9, 4, 219);
 				addListener(div2, "click", click_handler_1);
-				div2.className = "bt svelte-1y5q67i";
-				addLoc(div2, file$2, 13, 4, 300);
-				div3.className = "toolbar svelte-1y5q67i";
-				addLoc(div3, file$2, 1, 2, 26);
-				div4.className = "container svelte-1y5q67i";
-				addLoc(div4, file$2, 0, 0, 0);
+				div2.className = "bt svelte-6lzy8m";
+				addLoc(div2, file$2, 13, 4, 296);
+				addListener(div3, "click", click_handler_2);
+				div3.className = "bt warning svelte-6lzy8m";
+				addLoc(div3, file$2, 17, 4, 375);
+				div4.className = "toolbar svelte-6lzy8m";
+				addLoc(div4, file$2, 1, 2, 26);
+				div5.className = "container svelte-6lzy8m";
+				addLoc(div5, file$2, 0, 0, 0);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, div4, anchor);
-				append(div4, div3);
-				append(div3, div0);
+				insert(target, div5, anchor);
+				append(div5, div4);
+				append(div4, div0);
 				append(div0, a);
 				append(a, img);
-				append(div3, text0);
-				append(div3, div1);
-				append(div3, text2);
-				append(div3, div2);
+				append(div4, text0);
+				append(div4, div1);
+				append(div4, text2);
+				append(div4, div2);
+				append(div4, text4);
+				append(div4, div3);
 				current = true;
 			},
 
@@ -50465,11 +50685,12 @@ var app = (function () {
 
 			d: function destroy$$1(detach) {
 				if (detach) {
-					detachNode(div4);
+					detachNode(div5);
 				}
 
 				removeListener(div1, "click", click_handler);
 				removeListener(div2, "click", click_handler_1);
+				removeListener(div3, "click", click_handler_2);
 			}
 		};
 	}
@@ -50503,7 +50724,7 @@ var app = (function () {
 	}
 
 	assign(Topbar.prototype, protoDev);
-	assign(Topbar.prototype, methods$1);
+	assign(Topbar.prototype, methods$2);
 
 	Topbar.prototype._checkReadOnly = function _checkReadOnly(newState) {
 	};
@@ -50517,7 +50738,7 @@ var app = (function () {
 	    rock: null,
 	  }
 	}
-	var methods$2 = {
+	var methods$3 = {
 	  addPoint() {
 	    let rock = this.get().rock;
 	    let apc = rock.getAnchorPointCollection();
@@ -50526,7 +50747,6 @@ var app = (function () {
 	    // adding the point in the internal logic of rocknhull
 	    let pointInfo = apc.add([0, 0, 0]);
 	    let anchorPoint = pointInfo.anchorPoint;
-	    // console.log(pointInfo)
 
 	    // adding the UI for this point
 	    const sidebar = this.refs.sidebar;
@@ -50544,7 +50764,10 @@ var app = (function () {
 	        anchorPoint.setY(changedState.y);
 	      }else if ('z' in changedState) {
 	        anchorPoint.setZ(changedState.z);
-	      }else {
+	      }else if ('enabled' in changedState){
+	        anchorPoint.enable(changedState.enabled);
+	      } else {
+	        // this is about symmetry
 	        let k = Object.keys(changedState)[0];
 	        anchorPoint['enable' + k](changedState[k]);
 	      }
@@ -50567,7 +50790,22 @@ var app = (function () {
 	    let rock = this.get().rock;
 	    let hv = rock.getHullView();
 	    hv.buildConvexHull();
-	  }
+	  },
+
+
+	  deleteAllPoint() {
+	    const sidebar = this.refs.sidebar;
+	    sidebar.deleteAll();
+
+	    let rock = this.get().rock;
+	    let apc = rock.getAnchorPointCollection();
+	    let hv = rock.getHullView();
+
+	    apc.deleteAllAnchorPoints();
+	    hv.updateAnchorPoints();
+	    hv.deleteConvexHull();
+	  },
+
 	};
 
 	function oncreate$3() {
@@ -50593,6 +50831,9 @@ var app = (function () {
 		});
 		topbar.on("buildhull", function(event) {
 			component.buildhull();
+		});
+		topbar.on("deleteAllPoint", function(event) {
+			component.deleteAllPoint();
 		});
 
 		var sidebar = new Sidebar({
@@ -50692,7 +50933,7 @@ var app = (function () {
 	}
 
 	assign(App.prototype, protoDev);
-	assign(App.prototype, methods$2);
+	assign(App.prototype, methods$3);
 
 	App.prototype._checkReadOnly = function _checkReadOnly(newState) {
 	};
