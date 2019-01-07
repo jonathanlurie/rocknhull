@@ -10,6 +10,7 @@
     body {
       margin: 0;
       background: #339ba0;
+      font-family: "Helvetica Neue", sans-serif;
     }
     .main {
       position: absolute;
@@ -29,7 +30,6 @@
     .subtitle {
       text-align: center;
       color: #FFF;
-      font-family: "Helvetica Neue", sans-serif;
       font-size: 21px;
       text-transform: uppercase;
       font-weight: 200;
@@ -43,6 +43,23 @@
       border-top: white 1px solid;
       margin-bottom: 33px;
     }
+
+    #footer {
+      position: absolute;
+      width: 80%;
+      padding: 10px;
+      text-align: center;
+      color: #FFF;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+    }
+
+    #footer a {
+      color: #00595d;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -53,6 +70,15 @@
       <img src="rocknhullui/public/images/logo_white.png"/>
     </a>
     <div class="subtitle">Build rocks and convex hulls</div>
+  </div>
+
+  <div id="footer">
+    Or look at the core API examples
+    <a href="http://me.jonathanlurie.fr/rocknhull/rocknhull/examples/random.html">random</a> —
+    <a href="http://me.jonathanlurie.fr/rocknhull/rocknhull/examples/oddcube.html">oddCube</a> —
+    <a href="http://me.jonathanlurie.fr/rocknhull/rocknhull/examples/oddcubesymmetry.html">oddCubeSymmetry</a> —
+    <a href="http://me.jonathanlurie.fr/rocknhull/rocknhull/examples/longrock.html">longRock</a> —
+    <a href="http://me.jonathanlurie.fr/rocknhull/rocknhull/examples/sphere.html">shpere</a>
   </div>
 </body>
 </html>
