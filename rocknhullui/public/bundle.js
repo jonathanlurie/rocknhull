@@ -48357,7 +48357,6 @@ var app = (function () {
 	   * @param {Array} pos - position as [x, y, z]
 	   */
 	  constructor(pos, id){
-	    console.log('AnchorPoint ' + id);
 	    this._position = pos;
 	    this._id = id;
 	    this._mirror = [false, false, false, false, false, false, false];

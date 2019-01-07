@@ -1,0 +1,109 @@
+<html>
+<head>
+  <title>Test</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #fff;
+    }
+
+
+    #cardholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      width: 100vw;
+      height: 100vh;
+      display: inline-flex;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      background: #FFF;
+      margin: 0;
+    }
+
+    #threedeediv1 {
+      background: #eee;
+    }
+
+    #info {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin: auto;
+      padding: 15px;
+      background: #FFFA;
+      color: grey;
+      z-index: 1;
+      font-family: monospace;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    #info a {
+      color: #2bd0cb;
+      text-decoration: none;
+    }
+
+  </style>
+
+</head>
+<body>
+  <script src="../dist/rocknhull.js"></script>
+
+  <div id="info">
+    Generating a sphere from 10, all in their respective interval of [-100, 100]. Some points are inside the hull and where not used to build it — <a href="https://github.com/jonathanlurie/rocknhull/blob/master/rocknhull/examples/random.html">source</a>
+  </div>
+
+  <div id="cardholder">
+    <div id="threedeediv1" class="card"></div>
+  </div>
+
+
+  <script>
+
+    let threedeediv = document.getElementById( 'threedeediv1' )
+    let rnh = new rocknhull.Rocknhull(threedeediv)
+    let apc = rnh.getAnchorPointCollection()
+    let hv = rnh.getHullView()
+
+    makeRandomHull()
+
+    function makeRandomHull (nbPoints=10, xSpan=100, ySpan=100, zSpan=100) {
+      console.time('build')
+      apc.deleteAllAnchorPoints()
+
+      for (let i=0; i<nbPoints; i++) {
+        let x = Math.random() * xSpan - xSpan / 2
+        let y = Math.random() * ySpan - ySpan / 2
+        let z = Math.random() * zSpan - zSpan / 2
+
+        apc.add([x, y, z]).anchorPoint
+        /*
+        .enableMirrorX(true)
+        .enableMirrorY(true)
+        .enableMirrorZ(true)
+        .enableRadialMirrorX(true)
+        .enableRadialMirrorY(true)
+        .enableRadialMirrorZ(true)
+        .enableRadialMirrorO(true)
+        */
+      }
+
+      hv.updateAnchorPoints()
+      hv. buildConvexHull()
+      console.timeEnd('build')
+    }
+
+  </script>
+
+</body>
+</html>

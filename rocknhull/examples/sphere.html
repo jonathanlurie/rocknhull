@@ -32,11 +32,36 @@
       background: #eee;
     }
 
+    #info {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin: auto;
+      padding: 15px;
+      background: #FFFA;
+      color: grey;
+      z-index: 1;
+      font-family: monospace;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    #info a {
+      color: #2bd0cb;
+      text-decoration: none;
+    }
+
   </style>
 
 </head>
 <body>
   <script src="../dist/rocknhull.js"></script>
+
+  <div id="info">
+    Generating a sphere from 500 points projected at a random angle at a distance 100 from the origin — <a href="https://github.com/jonathanlurie/rocknhull/blob/master/rocknhull/examples/sphere.html">source</a>
+  </div>
 
   <div id="cardholder">
     <div id="threedeediv1" class="card"></div>
@@ -50,36 +75,9 @@
     let apc = rnh.getAnchorPointCollection()
     let hv = rnh.getHullView()
 
-    makeRandomHull()
+    makeRandomHullSpheric()
 
-    function makeRandomHull (nbPoints=10, xSpan=100, ySpan=100, zSpan=100) {
-      console.time('build')
-      apc.deleteAllAnchorPoints()
-
-      for (let i=0; i<nbPoints; i++) {
-        let x = Math.random() * xSpan - xSpan / 2
-        let y = Math.random() * ySpan - ySpan / 2
-        let z = Math.random() * zSpan - zSpan / 2
-
-        apc.add([x, y, z]).anchorPoint
-        /*
-        .enableMirrorX(true)
-        .enableMirrorY(true)
-        .enableMirrorZ(true)
-        .enableRadialMirrorX(true)
-        .enableRadialMirrorY(true)
-        .enableRadialMirrorZ(true)
-        .enableRadialMirrorO(true)
-        */
-      }
-
-      hv.updateAnchorPoints()
-      hv. buildConvexHull()
-      console.timeEnd('build')
-    }
-
-
-    function makeRandomHullSpheric (nbPoints=10, radius=100) {
+    function makeRandomHullSpheric (nbPoints=500, radius=100) {
       console.time('build')
       apc.deleteAllAnchorPoints()
 
