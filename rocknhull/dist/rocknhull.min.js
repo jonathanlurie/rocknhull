@@ -48360,7 +48360,26 @@
 	    }
 
 	    return points
+	  }
 
+
+	  /**
+	   * Generate a CSV line of this anchor point
+	   * @return {string}
+	   */
+	  getCSV (){
+	    let csv = `${this._position[0]}, ${this._position[1]}, ${this._position[2]}, ${this._enabled}, `;
+	    csv += `${this._mirror[0]}, ${this._mirror[1]}, ${this._mirror[2]}, ${this._mirror[3]}, ${this._mirror[4]}, ${this._mirror[5]}, ${this._mirror[6]}`;
+	    return csv
+	  }
+
+
+	  /**
+	   * Generate the header of the CSV, usefull to create a CSV file
+	   * @return {String}
+	   */
+	  static getHeaderCSV () {
+	    return '# x, y, z, enabled, mirrorX, mirrorY, mirrorZ, radialMirrorX, radialMirrorY, radialMirrorZ, radialMirrorO'
 	  }
 
 	}
@@ -48434,6 +48453,7 @@
 	  getAllAnchorPoints () {
 	    let all = [];
 	    let ids = Object.keys(this._collection);
+
 	    for (let i=0; i<ids.length; i++) {
 	      let ap = this._collection[ids[i]];
 	      if (ap.isEnabled()) {
@@ -48449,6 +48469,62 @@
 	   */
 	  deleteAllAnchorPoints () {
 	    this._collection = {};
+	  }
+
+
+	  /**
+	   * Generate a CSV list of the points available in this collection
+	   * @return {String} a CSV string
+	   */
+	  getCSV () {
+	    // starting with the header
+	    let csv = '# x, y, z, enabled, mirrorX, mirrorY, mirrorZ, radialMirrorX, radialMirrorY, radialMirrorZ, radialMirrorO';
+	    csv += '\n';
+
+	    let ids = Object.keys(this._collection);
+
+	    for (let i=0; i<ids.length; i++) {
+	      let ap = this._collection[ids[i]];
+	      csv += ap.getCSV() + '\n';
+	    }
+
+	    return csv
+	  }
+
+
+	  /**
+	   * Add some points from a CSV string.
+	   * Note: the points from the CSV are added to the list of points already in this collection
+	   * @param {String} csvStr - a string from a CSV file
+	   */
+	  addFromCSV (csvStr) {
+	    let lines = csvStr.trim().split('\n');
+
+	    for (let i=0; i<lines.length; i++) {
+	      let line = lines[i];
+
+	      if (line[0] == '#') {
+	        continue
+	      }
+
+	      let elem = line.split(',').map(elem => elem.trim());
+	      let anchorPointInfo = this.add([
+	        parseFloat(elem[0]),
+	        parseFloat(elem[1]),
+	        parseFloat(elem[2]),
+	      ]);
+
+	      let ap = anchorPointInfo.anchorPoint;
+	      ap.enable(elem[3] === 'true');
+	      ap.enableMirrorX(elem[4] === 'true');
+	      ap.enableMirrorY(elem[5] === 'true');
+	      ap.enableMirrorZ(elem[6] === 'true');
+	      ap.enableRadialMirrorX(elem[7] === 'true');
+	      ap.enableRadialMirrorY(elem[8] === 'true');
+	      ap.enableRadialMirrorZ(elem[9] === 'true');
+	      ap.enableRadialMirrorO(elem[10] === 'true');
+	    }
+
 	  }
 
 	}

@@ -223,7 +223,26 @@ export default class AnchorPoint {
     }
 
     return points
+  }
 
+
+  /**
+   * Generate a CSV line of this anchor point
+   * @return {string}
+   */
+  getCSV (){
+    let csv = `${this._position[0]}, ${this._position[1]}, ${this._position[2]}, ${this._enabled}, `
+    csv += `${this._mirror[0]}, ${this._mirror[1]}, ${this._mirror[2]}, ${this._mirror[3]}, ${this._mirror[4]}, ${this._mirror[5]}, ${this._mirror[6]}`
+    return csv
+  }
+
+
+  /**
+   * Generate the header of the CSV, usefull to create a CSV file
+   * @return {String}
+   */
+  static getHeaderCSV () {
+    return '# x, y, z, enabled, mirrorX, mirrorY, mirrorZ, radialMirrorX, radialMirrorY, radialMirrorZ, radialMirrorO'
   }
 
 }
