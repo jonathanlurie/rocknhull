@@ -1,5 +1,12 @@
 <div ref:threedeediv></div>
-<Topbar on:addPoint="addPoint()" on:buildhull="buildhull()" on:deleteAllPoint="deleteAllPoint()"/>
+<Topbar ref:thetopbar
+  on:addPoint="addPoint()"
+  on:buildhull="buildhull()"
+  on:deleteAllPoint="deleteAllPoint()"
+  on:importPoints="importPoints()"
+  on:exportPoints="exportPoints()"
+  on:exportHull="exportHull()"
+/>
 <Sidebar ref:sidebar/>
 
 <style>
@@ -22,6 +29,21 @@
   import Sidebar from './Sidebar.html'
   import Topbar from './Topbar.html'
 
+  /**
+   * Helper function to triger the downloqd of a file
+   * @param  {String} filename
+   * @param  {String} text - content of the file
+   */
+  function download(filename, text) {
+    let element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   export default {
     components: {
       Sidebar,
@@ -38,44 +60,55 @@
       const threedeediv = this.refs.threedeediv
       let rock = new rocknhull.Rocknhull(threedeediv)
       this.set({rock: rock})
-
-
-
     },
 
     methods: {
-      addPoint() {
+      addPoint(x=0, y=0, z=0) {
         let rock = this.get().rock
         let apc = rock.getAnchorPointCollection()
         let hv = rock.getHullView()
 
         // adding the point in the internal logic of rocknhull
-        let pointInfo = apc.add([0, 0, 0])
+        let pointInfo = apc.add([x, y, z])
         let anchorPoint = pointInfo.anchorPoint
 
         // adding the UI for this point
         const sidebar = this.refs.sidebar
         let pointComponent = sidebar.addPoint(pointInfo.id)
-        // console.log(pointComponent)
+        pointComponent.set({
+          x: x,
+          y: y,
+          z: z
+        })
 
         // bind some events
         pointComponent.on('modified', function(data){
+          console.log('modified')
           hv.deleteConvexHull()
           let changedState = data.changedState
 
-          if ('x' in changedState) {
-            anchorPoint.setX(changedState.x)
-          }else if ('y' in changedState) {
-            anchorPoint.setY(changedState.y)
-          }else if ('z' in changedState) {
-            anchorPoint.setZ(changedState.z)
-          }else if ('enabled' in changedState){
-            anchorPoint.enable(changedState.enabled)
-          } else {
-            // this is about symmetry
-            let k = Object.keys(changedState)[0]
-            anchorPoint['enable' + k](changedState[k])
+          let changedStateKeys = Object.keys(changedState)
+
+          for (let i=0; i<changedStateKeys.length; i++) {
+            let key = changedStateKeys[i]
+            let value = changedState[key]
+
+            if (key === 'x') {
+              anchorPoint.setX(value)
+            }else if (key === 'y') {
+              anchorPoint.setY(value)
+            }else if (key === 'z') {
+              anchorPoint.setZ(value)
+            }else if (key === 'enabled'){
+              anchorPoint.enable(value)
+            } else {
+              // this is about symmetry
+              anchorPoint['enable' + key](value)
+            }
+
           }
+
+
           hv.updateAnchorPoints()
         })
 
@@ -88,6 +121,41 @@
 
         // showing a sphere
         hv.updateAnchorPoints()
+
+        return pointComponent
+      },
+
+      addFromCSV (csvStr) {
+        let lines = csvStr.trim().split('\n')
+        let listOfNewPoint = []
+
+        for (let i=0; i<lines.length; i++) {
+          let line = lines[i]
+
+          if (line[0] == '#') {
+            continue
+          }
+
+          let elem = line.split(',').map(elem => elem.trim())
+
+          let pointComponent = this.addPoint(
+            parseFloat(elem[0]),
+            parseFloat(elem[1]),
+            parseFloat(elem[2]),
+          )
+
+          pointComponent.set({
+            MirrorX: elem[4] === 'true',
+            MirrorY: elem[5] === 'true',
+            MirrorZ: elem[6] === 'true',
+            RadialMirrorX: elem[7] === 'true',
+            RadialMirrorY: elem[8] === 'true',
+            RadialMirrorZ: elem[9] === 'true',
+            RadialMirrorO: elem[10] === 'true',
+            enabled: elem[3] === 'true'
+          })
+        }
+
       },
 
 
@@ -110,6 +178,57 @@
         hv.updateAnchorPoints()
         hv.deleteConvexHull()
       },
+
+
+      importPoints() {
+        let that = this
+        let input = document.createElement('input');
+        input.type = "file"
+
+        input.addEventListener('change', function(e){
+          let files = e.target.files
+
+          for (let i=0; i<files.length; i++) {
+            let reader = new FileReader()
+
+            reader.onloadend = function(evt) {
+              let str = evt.target.result
+              that.addFromCSV(str)
+
+            }
+            reader.readAsText(files[i])
+          }
+
+        })
+
+        input.click()
+      },
+
+
+      exportPoints() {
+        let rock = this.get().rock
+        let apc = rock.getAnchorPointCollection()
+        let csvString = apc.getCSV()
+
+        if (csvString) {
+          download('rocknhull_points.csv', csvString)
+        } else {
+          alert('The scene does not contain any point.')
+        }
+      },
+
+
+      exportHull() {
+        let rock = this.get().rock
+        let hv = rock.getHullView()
+        let objString = hv.exportHullOBJ()
+
+        if (objString) {
+          download('rocknhull_hull.obj', objString)
+        } else {
+          alert('You must build the hull before downloading it.')
+        }
+      }
 
     }
   }

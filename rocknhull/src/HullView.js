@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { ConvexBufferGeometry } from './thirdparty/ConvexGeometry'
+import { OBJExporter } from './thirdparty/OBJExporter'
 
 /**
  * The HullView in in charge of showing the convext hull
@@ -174,5 +175,19 @@ export default class HullView {
     this._on.renderNeeded()
   }
 
+
+  /**
+   * Get the OBJ string of the convex hull mesh
+   * @return {String|null}
+   */
+  exportHullOBJ () {
+    if (this._convexHullContainer.children.length > 0) {
+      let exporter = new OBJExporter()
+      let result = exporter.parse( this._convexHullContainer )
+      return result
+    }
+
+    return null
+  }
 
 }

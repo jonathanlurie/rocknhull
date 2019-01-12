@@ -11,9 +11,25 @@
       Add point
     </div>
 
+    <div class="bt" on:click="fire('importPoints')">
+      Import points
+    </div>
+
+    <div class="bt" on:click="fire('exportPoints')">
+      Export points
+    </div>
+
+    <div class="separator"></div>
+
     <div class="bt" on:click="fire('buildhull')">
       Build hull
     </div>
+
+    <div class="bt" on:click="fire('exportHull')">
+      Export hull
+    </div>
+
+    <div class="separator"></div>
 
     <div class="bt warning" on:click="fire('deleteAllPoint')">
       Delete all
@@ -52,6 +68,15 @@
     user-select: none;
     text-transform: uppercase;
     font-weight: 300;
+  }
+
+
+  .separator {
+    width: 1px;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 15px;
+    border-left: dashed #09777b 0.5px;
   }
 
   .logo {

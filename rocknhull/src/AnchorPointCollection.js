@@ -90,14 +90,19 @@ export default class AnchorPointCollection {
 
   /**
    * Generate a CSV list of the points available in this collection
-   * @return {String} a CSV string
+   * @return {String|null} a CSV string or null if no point is present
    */
   getCSV () {
+
+    let ids = Object.keys(this._collection)
+
+    if (ids.length === 0) {
+      return null
+    }
+
     // starting with the header
     let csv = '# x, y, z, enabled, mirrorX, mirrorY, mirrorZ, radialMirrorX, radialMirrorY, radialMirrorZ, radialMirrorO'
     csv += '\n'
-
-    let ids = Object.keys(this._collection)
 
     for (let i=0; i<ids.length; i++) {
       let ap = this._collection[ids[i]]
