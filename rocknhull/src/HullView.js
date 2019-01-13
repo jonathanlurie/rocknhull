@@ -27,7 +27,7 @@ export default class HullView {
     //let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
     this._anchorPointsGeometry = new THREE.SphereBufferGeometry(1, 32, 32)
     //this._anchorPointsMesh = new THREE.Mesh(this._anchorPointsGeometry, anchorPointsMaterial)
-    this._convexHullMaterial = new THREE.MeshPhongMaterial({ color: 0x6fe2db })
+    this._convexHullMaterial = new THREE.MeshPhongMaterial({ color: 0xeaeaea })
 
     this._on = {
       renderNeeded: function () {}

@@ -49835,7 +49835,7 @@
 	    //let anchorPointsMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
 	    this._anchorPointsGeometry = new SphereBufferGeometry(1, 32, 32);
 	    //this._anchorPointsMesh = new THREE.Mesh(this._anchorPointsGeometry, anchorPointsMaterial)
-	    this._convexHullMaterial = new MeshPhongMaterial({ color: 0x6fe2db });
+	    this._convexHullMaterial = new MeshPhongMaterial({ color: 0xeaeaea });
 
 	    this._on = {
 	      renderNeeded: function () {}
