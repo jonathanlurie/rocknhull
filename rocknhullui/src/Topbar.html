@@ -11,6 +11,10 @@
       Add point
     </div>
 
+    <div class="bt" on:click="fire('addRandomPoints')">
+      Add random
+    </div>
+
     <div class="bt" on:click="fire('importPoints')">
       Import points
     </div>
@@ -53,6 +57,7 @@
   .toolbar {
     display: inline-flex;
     margin: 7px;
+    overflow-x: auto;
   }
 
   .bt {
@@ -68,8 +73,12 @@
     user-select: none;
     text-transform: uppercase;
     font-weight: 300;
+    transition: all 0.2s;
   }
 
+  .bt:hover {
+    background: #353535;
+  }
 
   .separator {
     width: 1px;

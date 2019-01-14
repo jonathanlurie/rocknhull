@@ -6,6 +6,7 @@
   on:importPoints="importPoints()"
   on:exportPoints="exportPoints()"
   on:exportHull="exportHull()"
+  on:addRandomPoints="addRandomPoints()"
 />
 <Sidebar ref:sidebar/>
 
@@ -227,6 +228,24 @@
           download('rocknhull_hull.obj', objString)
         } else {
           alert('You must build the hull before downloading it.')
+        }
+      },
+
+
+      addRandomPoints() {
+        let promptAnswer = prompt("How many random points would you like to add?")
+        let nbPoints = Math.min(Math.abs(parseInt(promptAnswer)), 100)
+
+        if(isNaN(nbPoints)) {
+          return
+        }
+
+        for (let i=0; i<nbPoints; i++) {
+          this.addPoint(
+            Math.random() * 100 - 50,
+            Math.random() * 100 - 50,
+            Math.random() * 100 - 50
+          )
         }
       }
 

@@ -50336,7 +50336,6 @@ var app = (function () {
 	    changedState: changedState
 	  };
 
-	  console.log(eventArg);
 	  this.fire('modified', eventArg);
 	}
 	const file = "src/Point.html";
@@ -50964,36 +50963,40 @@ var app = (function () {
 	const file$2 = "src/Topbar.html";
 
 	function create_main_fragment$2(component, ctx) {
-		var div10, div9, div0, a, img, text0, div1, text2, div2, text4, div3, text6, div4, text7, div5, text9, div6, text11, div7, text12, div8, current;
+		var div11, div10, div0, a, img, text0, div1, text2, div2, text4, div3, text6, div4, text8, div5, text9, div6, text11, div7, text13, div8, text14, div9, current;
 
 		function click_handler(event) {
 			component.fire('addPoint');
 		}
 
 		function click_handler_1(event) {
-			component.fire('importPoints');
+			component.fire('addRandomPoints');
 		}
 
 		function click_handler_2(event) {
-			component.fire('exportPoints');
+			component.fire('importPoints');
 		}
 
 		function click_handler_3(event) {
-			component.fire('buildhull');
+			component.fire('exportPoints');
 		}
 
 		function click_handler_4(event) {
-			component.fire('exportHull');
+			component.fire('buildhull');
 		}
 
 		function click_handler_5(event) {
+			component.fire('exportHull');
+		}
+
+		function click_handler_6(event) {
 			component.fire('deleteAllPoint');
 		}
 
 		return {
 			c: function create() {
+				div11 = createElement("div");
 				div10 = createElement("div");
-				div9 = createElement("div");
 				div0 = createElement("div");
 				a = createElement("a");
 				img = createElement("img");
@@ -51002,81 +51005,89 @@ var app = (function () {
 				div1.textContent = "Add point";
 				text2 = createText("\n\n    ");
 				div2 = createElement("div");
-				div2.textContent = "Import points";
+				div2.textContent = "Add random";
 				text4 = createText("\n\n    ");
 				div3 = createElement("div");
-				div3.textContent = "Export points";
+				div3.textContent = "Import points";
 				text6 = createText("\n\n    ");
 				div4 = createElement("div");
-				text7 = createText("\n\n    ");
+				div4.textContent = "Export points";
+				text8 = createText("\n\n    ");
 				div5 = createElement("div");
-				div5.textContent = "Build hull";
 				text9 = createText("\n\n    ");
 				div6 = createElement("div");
-				div6.textContent = "Export hull";
+				div6.textContent = "Build hull";
 				text11 = createText("\n\n    ");
 				div7 = createElement("div");
-				text12 = createText("\n\n    ");
+				div7.textContent = "Export hull";
+				text13 = createText("\n\n    ");
 				div8 = createElement("div");
-				div8.textContent = "Delete all";
+				text14 = createText("\n\n    ");
+				div9 = createElement("div");
+				div9.textContent = "Delete all";
 				img.src = "images/logo_white.png";
-				img.className = "svelte-ofj211";
+				img.className = "svelte-1syvsh8";
 				addLoc(img, file$2, 5, 8, 156);
 				a.href = "https://github.com/jonathanlurie/rocknhull";
 				a.target = "_blank";
 				addLoc(a, file$2, 4, 6, 78);
-				div0.className = "logo svelte-ofj211";
+				div0.className = "logo svelte-1syvsh8";
 				addLoc(div0, file$2, 3, 4, 53);
 				addListener(div1, "click", click_handler);
-				div1.className = "bt svelte-ofj211";
+				div1.className = "bt svelte-1syvsh8";
 				addLoc(div1, file$2, 9, 4, 219);
 				addListener(div2, "click", click_handler_1);
-				div2.className = "bt svelte-ofj211";
+				div2.className = "bt svelte-1syvsh8";
 				addLoc(div2, file$2, 13, 4, 296);
 				addListener(div3, "click", click_handler_2);
-				div3.className = "bt svelte-ofj211";
+				div3.className = "bt svelte-1syvsh8";
 				addLoc(div3, file$2, 17, 4, 381);
-				div4.className = "separator svelte-ofj211";
+				addListener(div4, "click", click_handler_3);
+				div4.className = "bt svelte-1syvsh8";
 				addLoc(div4, file$2, 21, 4, 466);
-				addListener(div5, "click", click_handler_3);
-				div5.className = "bt svelte-ofj211";
-				addLoc(div5, file$2, 23, 4, 501);
+				div5.className = "separator svelte-1syvsh8";
+				addLoc(div5, file$2, 25, 4, 551);
 				addListener(div6, "click", click_handler_4);
-				div6.className = "bt svelte-ofj211";
-				addLoc(div6, file$2, 27, 4, 580);
-				div7.className = "separator svelte-ofj211";
-				addLoc(div7, file$2, 31, 4, 661);
-				addListener(div8, "click", click_handler_5);
-				div8.className = "bt warning svelte-ofj211";
-				addLoc(div8, file$2, 33, 4, 696);
-				div9.className = "toolbar svelte-ofj211";
-				addLoc(div9, file$2, 1, 2, 26);
-				div10.className = "container svelte-ofj211";
-				addLoc(div10, file$2, 0, 0, 0);
+				div6.className = "bt svelte-1syvsh8";
+				addLoc(div6, file$2, 27, 4, 586);
+				addListener(div7, "click", click_handler_5);
+				div7.className = "bt svelte-1syvsh8";
+				addLoc(div7, file$2, 31, 4, 665);
+				div8.className = "separator svelte-1syvsh8";
+				addLoc(div8, file$2, 35, 4, 746);
+				addListener(div9, "click", click_handler_6);
+				div9.className = "bt warning svelte-1syvsh8";
+				addLoc(div9, file$2, 37, 4, 781);
+				div10.className = "toolbar svelte-1syvsh8";
+				addLoc(div10, file$2, 1, 2, 26);
+				div11.className = "container svelte-1syvsh8";
+				addLoc(div11, file$2, 0, 0, 0);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, div10, anchor);
-				append(div10, div9);
-				append(div9, div0);
+				insert(target, div11, anchor);
+				append(div11, div10);
+				append(div10, div0);
 				append(div0, a);
 				append(a, img);
-				append(div9, text0);
-				append(div9, div1);
-				append(div9, text2);
-				append(div9, div2);
-				append(div9, text4);
-				append(div9, div3);
-				append(div9, text6);
-				append(div9, div4);
-				append(div9, text7);
-				append(div9, div5);
-				append(div9, text9);
-				append(div9, div6);
-				append(div9, text11);
-				append(div9, div7);
-				append(div9, text12);
-				append(div9, div8);
+				append(div10, text0);
+				append(div10, div1);
+				append(div10, text2);
+				append(div10, div2);
+				append(div10, text4);
+				append(div10, div3);
+				append(div10, text6);
+				append(div10, div4);
+				append(div10, text8);
+				append(div10, div5);
+				append(div10, text9);
+				append(div10, div6);
+				append(div10, text11);
+				append(div10, div7);
+				append(div10, text13);
+				append(div10, div8);
+				append(div10, text14);
+				append(div10, div9);
 				current = true;
 			},
 
@@ -51092,15 +51103,16 @@ var app = (function () {
 
 			d: function destroy$$1(detach) {
 				if (detach) {
-					detachNode(div10);
+					detachNode(div11);
 				}
 
 				removeListener(div1, "click", click_handler);
 				removeListener(div2, "click", click_handler_1);
 				removeListener(div3, "click", click_handler_2);
-				removeListener(div5, "click", click_handler_3);
+				removeListener(div4, "click", click_handler_3);
 				removeListener(div6, "click", click_handler_4);
-				removeListener(div8, "click", click_handler_5);
+				removeListener(div7, "click", click_handler_5);
+				removeListener(div9, "click", click_handler_6);
 			}
 		};
 	}
@@ -51328,6 +51340,24 @@ var app = (function () {
 	    } else {
 	      alert('You must build the hull before downloading it.');
 	    }
+	  },
+
+
+	  addRandomPoints() {
+	    let promptAnswer = prompt("How many random points would you like to add?");
+	    let nbPoints = Math.min(Math.abs(parseInt(promptAnswer)), 100);
+
+	    if(isNaN(nbPoints)) {
+	      return
+	    }
+
+	    for (let i=0; i<nbPoints; i++) {
+	      this.addPoint(
+	        Math.random() * 100 - 50,
+	        Math.random() * 100 - 50,
+	        Math.random() * 100 - 50
+	      );
+	    }
 	  }
 
 	};
@@ -51364,6 +51394,9 @@ var app = (function () {
 		});
 		topbar.on("exportHull", function(event) {
 			component.exportHull();
+		});
+		topbar.on("addRandomPoints", function(event) {
+			component.addRandomPoints();
 		});
 
 		component.refs.thetopbar = topbar;
